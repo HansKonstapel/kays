@@ -1,1212 +1,916 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bewustzijns-Mapping Explorer - 4D Quaternion Framework</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        h1 {
+            font-size: 2em;
+            text-shadow: 0 0 15px #00ffff;
+            margin-bottom: 10px;
+        }
+
+        .author {
+            color: #00ffff;
+            font-size: 0.9em;
+        }
+
+        nav {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: sticky;
+            top: 80px;
+            z-index: 999;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #00ffff 0%, #0080ff 100%);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #000;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.5);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #ff00ff 0%, #ff0080 100%);
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.1);
+        }
+
+        h2 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        h3 {
+            color: #00dddd;
+            margin: 15px 0 10px 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        th {
+            background: linear-gradient(135deg, #00ffff 0%, #0080ff 100%);
+            color: #000;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+            position: sticky;
+            top: 145px;
+            z-index: 10;
+        }
+
+        td {
+            padding: 10px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        tr:hover {
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 30px;
+        }
+
+        .level-1 { background: #ffffff; color: #000; }
+        .level-2 { background: #0000ff; color: #fff; }
+        .level-3 { background: #00ffff; color: #000; }
+        .level-4 { background: #00ff00; color: #000; }
+        .level-5 { background: #ffff00; color: #000; }
+        .level-6 { background: #ffa500; color: #000; }
+        .level-7 { background: #ff00ff; color: #fff; }
+        .level-8 { background: #ff0000; color: #fff; }
+        .level-9 { background: #8b4513; color: #fff; }
+
+        #viz-container {
+            width: 100%;
+            height: 60vh;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .search-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        #searchInput {
+            width: 80%;
+            max-width: 500px;
+            padding: 12px;
+            border-radius: 25px;
+            border: 2px solid #00ffff;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .system-selector {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .system-btn {
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.3s;
+        }
+
+        .system-btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+        }
+
+        .system-btn.selected {
+            background: #00ffff;
+            color: #000;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(255, 0, 255, 0.1) 100%);
+            border-left: 4px solid #00ffff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .mini-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.5em; }
+            nav { top: 70px; }
+            th { top: 135px; }
+            .nav-btn { padding: 8px 15px; font-size: 0.9em; }
+        }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="nl"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Bewustzijns-Mapping Explorer - 4D Quaternion Framework&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>* {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #ffffff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>min-height: 100vh;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>header {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(0, 0, 0, 0.8);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: sticky;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1000;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>h1 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2em;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-shadow: 0 0 15px #00ffff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.author {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #00ffff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.9em;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>nav {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(0, 0, 0, 0.6);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: sticky;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top: 80px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index: 999;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-btn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #00ffff 0%, #0080ff 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #000;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-btn:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-2px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 5px 15px rgba(0, 255, 255, 0.5);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-btn.active {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #ff00ff 0%, #ff0080 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #fff;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 1400px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.section {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: fadeIn 0.5s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.section.active {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes fadeIn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>from { opacity: 0; transform: translateY(20px); }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>to { opacity: 1; transform: translateY(0); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 255, 0.05);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid rgba(0, 255, 255, 0.3);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 20px 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 15px rgba(0, 255, 255, 0.1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>h2 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #00ffff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-shadow: 0 0 10px #00ffff;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>h3 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #00dddd;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 15px 0 10px 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.table-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>overflow-x: auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 20px 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>table {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-collapse: collapse;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(0, 0, 0, 0.3);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>th {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #00ffff 0%, #0080ff 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #000;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: left;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: sticky;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top: 145px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index: 10;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>td {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid rgba(0, 255, 255, 0.2);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>tr:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(0, 255, 255, 0.1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.level-badge {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: inline-block;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 5px 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>min-width: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.level-1 { background: #ffffff; color: #000; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.level-2 { background: #0000ff; color: #fff; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.level-3 { background: #00ffff; color: #000; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.level-4 { background: #00ff00; color: #000; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.level-5 { background: #ffff00; color: #000; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.level-6 { background: #ffa500; color: #000; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.level-7 { background: #ff00ff; color: #fff; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.level-8 { background: #ff0000; color: #fff; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.level-9 { background: #8b4513; color: #fff; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>#viz-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 60vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.search-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 20px 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>#searchInput {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 80%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 500px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 25px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid #00ffff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(0, 0, 0, 0.5);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #fff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>#searchInput:focus {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>outline: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.highlight {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 0, 0.3);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 2px 4px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 3px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.comparison-grid {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 20px 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.system-selector {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 20px 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.system-btn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(0, 255, 255, 0.2);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid #00ffff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 8px 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #fff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.system-btn:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(0, 255, 255, 0.4);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.system-btn.selected {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #00ffff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #000;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.insight-box {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(255, 0, 255, 0.1) 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-left: 4px solid #00ffff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 15px 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.grid-3 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 20px 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.mini-card {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(0, 0, 0, 0.3);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid rgba(0, 255, 255, 0.3);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@media (max-width: 768px) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>h1 { font-size: 1.5em; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>nav { top: 70px; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>th { top: 135px; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>.nav-btn { padding: 8px 15px; font-size: 0.9em; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1 id="mainTitle"&gt;🌀 Bewustzijns-Mapping Explorer&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p class="author"&gt;4D Quaternion Framework | J. Konstapel, Leiden 2025&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="langToggle" class="nav-btn" style="position: absolute; top: 20px; right: 20px;"&gt;🌐 EN&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav id="mainNav"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-btn active" onclick="showSection('home')"&gt;Home&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-btn" onclick="showSection('core')"&gt;Kern Systemen&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-btn" onclick="showSection('philosophy')"&gt;Filosofie&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-btn" onclick="showSection('neuroscience')"&gt;Neuroscience&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-btn" onclick="showSection('development')"&gt;Ontwikkeling&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-btn" onclick="showSection('culture')"&gt;Cultuur &amp; Kunst&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-btn" onclick="showSection('compare')"&gt;Vergelijken&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="nav-btn" onclick="showSection('search')"&gt;Zoeken&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- HOME SECTION --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="home" class="section active"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Welkom bij de Bewustzijns-Mapping Explorer&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;Deze interactieve website visualiseert de systematische mapping van bewustzijnssystemen gebaseerd op het principe dat alle tradities dezelfde paden beschrijven in een 4-dimensionale ruimte.&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="insight-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;strong&gt;Kern Inzicht:&lt;/strong&gt; Alle bewustzijnstradities zijn topologisch equivalent - ze beschrijven dezelfde transformatiepaden maar gebruiken verschillende labels en coördinatensystemen.</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;4D Bewustzijnsruimte Visualisatie&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="viz-container"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p style="text-align: center; margin-top: 10px; color: #00ffff;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>✨ 9 Bewustzijnsniveaus in dynamische 4D rotatie</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;4D Bewustzijnsruimte Dimensies&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="grid-3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mini-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3&gt;1. Verticaal&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;Ontwikkelingsniveau en complexiteit&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mini-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3&gt;2. Horizontaal&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;Veranderingsrichting en modaliteit&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mini-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3&gt;3. Cyclisch&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;Temporele fase en ritme&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mini-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3&gt;4. Relationeel&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;Context en omgeving&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- CORE SYSTEMS SECTION --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="core" class="section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Kern Bewustzijnscentra Mapping&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="table-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table id="coreTable"&gt;&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- PHILOSOPHY SECTION --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="philosophy" class="section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Filosofische &amp; Spirituele Tradities&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="table-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table id="philosophyTable"&gt;&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- NEUROSCIENCE SECTION --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="neuroscience" class="section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Neurowetenschappen &amp; Bewustzijnsonderzoek&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="table-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table id="neuroscienceTable"&gt;&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Psychedelisch Onderzoek&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="table-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table id="psychedelicTable"&gt;&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- DEVELOPMENT SECTION --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="development" class="section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Archetypen &amp; Mythologie&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="table-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table id="archetypeTable"&gt;&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Ontwikkelingspsychologie&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="table-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table id="developmentTable"&gt;&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- CULTURE SECTION --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="culture" class="section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Muziektheorie &amp; Vibratie&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="table-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table id="musicTable"&gt;&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Kleurenpsychologie &amp; Licht&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="table-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table id="colorTable"&gt;&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Geometrie &amp; Sacrale Vorm&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="table-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table id="geometryTable"&gt;&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- COMPARE SECTION --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="compare" class="section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Systemen Vergelijken&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;Selecteer twee systemen om naast elkaar te vergelijken:&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="system-selector" id="systemSelector"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="comparison-grid" id="comparisonGrid"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Convergentie Patronen&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="insight-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;1. Verticale Progressie&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Alle systemen tonen beweging van materieel → emotioneel → mentaal → spiritueel&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="insight-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;2. Integratie op Niveau 6&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Bijna alle systemen hebben een integratief/balancerend element rond niveau 6 (Tiferet/Solar Plexus/Oranje)&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="insight-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;3. Transcendentie op Niveau 1-2&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Universele erkenning van transcendente toestanden aan de top&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="insight-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;4. Survival/Instinct Base&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Alle systemen erkennen basale overlevingslagen (7-8-9)&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="insight-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;5. Heart/Love Center&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Consistent hart/liefde centrum rond niveau 4 (Chesed/Anahata/G-centrum)&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- SEARCH SECTION --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="search" class="section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Zoeken in Alle Systemen&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="search-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="searchInput" placeholder="Zoek een concept, niveau, of term..."&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="searchResults"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// LANGUAGE SYSTEM</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let currentLang = 'nl';</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const translations = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>nl: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>mainTitle: "🌀 Bewustzijns-Mapping Explorer",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>nav: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>home: "Home",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>core: "Kern Systemen",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>philosophy: "Filosofie",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>neuroscience: "Neuroscience",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>development: "Ontwikkeling",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>culture: "Cultuur &amp; Kunst",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>compare: "Vergelijken",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>search: "Zoeken"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>home: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>welcome: "Welkom bij de Bewustzijns-Mapping Explorer",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>intro: "Deze interactieve website visualiseert de systematische mapping van bewustzijnssystemen gebaseerd op het principe dat alle tradities dezelfde paden beschrijven in een 4-dimensionale ruimte.",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>coreInsight: "Kern Inzicht:",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>insightText: "Alle bewustzijnstradities zijn topologisch equivalent - ze beschrijven dezelfde transformatiepaden maar gebruiken verschillende labels en coördinatensystemen.",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>vizTitle: "4D Bewustzijnsruimte Visualisatie",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>vizSubtext: "✨ 9 Bewustzijnsniveaus in dynamische 4D rotatie",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dimensionsTitle: "4D Bewustzijnsruimte Dimensies",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim1: "Verticaal",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim1desc: "Ontwikkelingsniveau en complexiteit",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim2: "Horizontaal",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim2desc: "Veranderingsrichting en modaliteit",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim3: "Cyclisch",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim3desc: "Temporele fase en ritme",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim4: "Relationeel",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim4desc: "Context en omgeving"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tables: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>level: "Niveau",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>sefira: "Sefira",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>chakra: "Chakra",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>hd: "HD-Centrum",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>function: "Functie",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>trigram: "Trigram",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>element: "4-Element",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>wuxing: "Wu-Xing",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>jung: "Jung",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>aurobindo: "Sri Aurobindo",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>vedanta: "Vedanta",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>sufisme: "Sufisme",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>gurdjieff: "Gurdjieff",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>spiral: "Spiral Dynamics",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>neural: "Neurale Netwerken",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>iit: "IIT Φ-complexiteit",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>workspace: "Global Workspace",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>leary: "Leary 8-Circuit",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>centrum: "Centrum",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dmt: "5-MeO-DMT",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>psilocybin: "Psilocybin",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>lsd: "LSD",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>mdma: "MDMA",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>ketamine: "Ketamine",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>meditation: "Meditation States",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>tarot: "Tarot Majors",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>greek: "Greek Gods",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>hindu: "Hindu Devas",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>celtic: "Celtic/Nordic",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>campbell: "Campbell Hero",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>piaget: "Piaget",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>kohlberg: "Kohlberg",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>gilligan: "Gilligan",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>fowler: "Fowler Faith",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>beck: "Beck &amp; Cowan",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>kegan: "Kegan"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>sections: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>coreTitle: "Kern Bewustzijnscentra Mapping",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>philosophyTitle: "Filosofische &amp; Spirituele Tradities",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>neuroscienceTitle: "Neurowetenschappen &amp; Bewustzijnsonderzoek",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>psychedelicTitle: "Psychedelisch Onderzoek",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>archetypeTitle: "Archetypen &amp; Mythologie",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>developmentTitle: "Ontwikkelingspsychologie",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>musicTitle: "Muziektheorie &amp; Vibratie",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>colorTitle: "Kleurenpsychologie &amp; Licht",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>geometryTitle: "Geometrie &amp; Sacrale Vorm",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>compareTitle: "Systemen Vergelijken",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>compareIntro: "Selecteer twee systemen om naast elkaar te vergelijken:",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>compareSelect: "Selecteer twee systemen om te vergelijken",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergenceTitle: "Convergentie Patronen",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence1: "Verticale Progressie",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence1desc: "Alle systemen tonen beweging van materieel → emotioneel → mentaal → spiritueel",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence2: "Integratie op Niveau 6",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence2desc: "Bijna alle systemen hebben een integratief/balancerend element rond niveau 6 (Tiferet/Solar Plexus/Oranje)",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence3: "Transcendentie op Niveau 1-2",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence3desc: "Universele erkenning van transcendente toestanden aan de top",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence4: "Survival/Instinct Base",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence4desc: "Alle systemen erkennen basale overlevingslagen (7-8-9)",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence5: "Heart/Love Center",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence5desc: "Consistent hart/liefde centrum rond niveau 4 (Chesed/Anahata/G-centrum)",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>searchTitle: "Zoeken in Alle Systemen",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>searchPlaceholder: "Zoek een concept, niveau, of term...",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>searchNoResults: "Geen resultaten gevonden",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>searchFound: "Gevonden in"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>en: {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>mainTitle: "🌀 Consciousness Mapping Explorer",</p>
-<p class="p1"><span class="Apple-converted-space">                </span>nav: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>home: "Home",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>core: "Core Systems",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>philosophy: "Philosophy",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>neuroscience: "Neuroscience",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>development: "Development",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>culture: "Culture &amp; Art",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>compare: "Compare",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>search: "Search"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>home: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>welcome: "Welcome to the Consciousness Mapping Explorer",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>intro: "This interactive website visualizes the systematic mapping of consciousness systems based on the principle that all traditions describe the same paths in 4-dimensional space.",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>coreInsight: "Core Insight:",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>insightText: "All consciousness traditions are topologically equivalent - they describe the same transformation paths but use different labels and coordinate systems.",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>vizTitle: "4D Consciousness Space Visualization",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>vizSubtext: "✨ 9 Consciousness Levels in Dynamic 4D Rotation",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dimensionsTitle: "4D Consciousness Space Dimensions",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim1: "Vertical",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim1desc: "Development level and complexity",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim2: "Horizontal",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim2desc: "Direction of change and modality",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim3: "Cyclical",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim3desc: "Temporal phase and rhythm",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim4: "Relational",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dim4desc: "Context and environment"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>tables: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>level: "Level",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>sefira: "Sefira",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>chakra: "Chakra",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>hd: "HD-Center",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>function: "Function",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>trigram: "Trigram",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>element: "4-Element",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>wuxing: "Wu-Xing",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>jung: "Jung",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>aurobindo: "Sri Aurobindo",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>vedanta: "Vedanta",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>sufisme: "Sufism",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>gurdjieff: "Gurdjieff",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>spiral: "Spiral Dynamics",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>neural: "Neural Networks",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>iit: "IIT Φ-complexity",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>workspace: "Global Workspace",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>leary: "Leary 8-Circuit",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>centrum: "Center",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>dmt: "5-MeO-DMT",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>psilocybin: "Psilocybin",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>lsd: "LSD",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>mdma: "MDMA",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>ketamine: "Ketamine",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>meditation: "Meditation States",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>tarot: "Tarot Majors",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>greek: "Greek Gods",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>hindu: "Hindu Devas",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>celtic: "Celtic/Nordic",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>campbell: "Campbell Hero",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>piaget: "Piaget",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>kohlberg: "Kohlberg",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>gilligan: "Gilligan",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>fowler: "Fowler Faith",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>beck: "Beck &amp; Cowan",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>kegan: "Kegan"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>},</p>
-<p class="p1"><span class="Apple-converted-space">                </span>sections: {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>coreTitle: "Core Consciousness Centers Mapping",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>philosophyTitle: "Philosophical &amp; Spiritual Traditions",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>neuroscienceTitle: "Neuroscience &amp; Consciousness Research",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>psychedelicTitle: "Psychedelic Research",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>archetypeTitle: "Archetypes &amp; Mythology",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>developmentTitle: "Developmental Psychology",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>musicTitle: "Music Theory &amp; Vibration",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>colorTitle: "Color Psychology &amp; Light",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>geometryTitle: "Geometry &amp; Sacred Form",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>compareTitle: "Compare Systems",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>compareIntro: "Select two systems to compare side by side:",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>compareSelect: "Select two systems to compare",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergenceTitle: "Convergence Patterns",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence1: "Vertical Progression",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence1desc: "All systems show movement from material → emotional → mental → spiritual",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence2: "Integration at Level 6",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence2desc: "Nearly all systems have an integrative/balancing element around level 6 (Tiferet/Solar Plexus/Orange)",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence3: "Transcendence at Level 1-2",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence3desc: "Universal recognition of transcendent states at the top",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence4: "Survival/Instinct Base",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence4desc: "All systems recognize basic survival layers (7-8-9)",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence5: "Heart/Love Center",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>convergence5desc: "Consistent heart/love center around level 4 (Chesed/Anahata/G-center)",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>searchTitle: "Search All Systems",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>searchPlaceholder: "Search for a concept, level, or term...",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>searchNoResults: "No results found",</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>searchFound: "Found in"</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function translatePage() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const t = translations[currentLang];</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Main title</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('mainTitle').textContent = t.mainTitle;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Navigation</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const navButtons = document.querySelectorAll('#mainNav .nav-btn');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>navButtons[0].textContent = t.nav.home;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>navButtons[1].textContent = t.nav.core;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>navButtons[2].textContent = t.nav.philosophy;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>navButtons[3].textContent = t.nav.neuroscience;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>navButtons[4].textContent = t.nav.development;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>navButtons[5].textContent = t.nav.culture;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>navButtons[6].textContent = t.nav.compare;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>navButtons[7].textContent = t.nav.search;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Home section</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('#home h2').textContent = t.home.welcome;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('#home p').textContent = t.home.intro;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('#home .insight-box strong').textContent = t.home.coreInsight;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('#home .insight-box').childNodes[2].textContent = ' ' + t.home.insightText;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#home .card h2')[1].textContent = t.home.vizTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('#home #viz-container + p').textContent = t.home.vizSubtext;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#home .card h2')[2].textContent = t.home.dimensionsTitle;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const miniCards = document.querySelectorAll('#home .mini-card');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>miniCards[0].querySelector('h3').textContent = '1. ' + t.home.dim1;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>miniCards[0].querySelector('p').textContent = t.home.dim1desc;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>miniCards[1].querySelector('h3').textContent = '2. ' + t.home.dim2;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>miniCards[1].querySelector('p').textContent = t.home.dim2desc;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>miniCards[2].querySelector('h3').textContent = '3. ' + t.home.dim3;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>miniCards[2].querySelector('p').textContent = t.home.dim3desc;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>miniCards[3].querySelector('h3').textContent = '4. ' + t.home.dim4;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>miniCards[3].querySelector('p').textContent = t.home.dim4desc;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Section titles</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('#core .card h2').textContent = t.sections.coreTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#philosophy .card h2')[0].textContent = t.sections.philosophyTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#neuroscience .card h2')[0].textContent = t.sections.neuroscienceTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#neuroscience .card h2')[1].textContent = t.sections.psychedelicTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#development .card h2')[0].textContent = t.sections.archetypeTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#development .card h2')[1].textContent = t.sections.developmentTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#culture .card h2')[0].textContent = t.sections.musicTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#culture .card h2')[1].textContent = t.sections.colorTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#culture .card h2')[2].textContent = t.sections.geometryTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#compare .card h2')[0].textContent = t.sections.compareTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('#compare .card p').textContent = t.sections.compareIntro;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('#compare .card h2')[1].textContent = t.sections.convergenceTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('#search .card h2').textContent = t.sections.searchTitle;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('searchInput').placeholder = t.sections.searchPlaceholder;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Convergence patterns</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const insights = document.querySelectorAll('#compare .insight-box');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>insights[0].querySelector('h3').textContent = '1. ' + t.sections.convergence1;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>insights[0].querySelector('p').textContent = t.sections.convergence1desc;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>insights[1].querySelector('h3').textContent = '2. ' + t.sections.convergence2;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>insights[1].querySelector('p').textContent = t.sections.convergence2desc;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>insights[2].querySelector('h3').textContent = '3. ' + t.sections.convergence3;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>insights[2].querySelector('p').textContent = t.sections.convergence3desc;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>insights[3].querySelector('h3').textContent = '4. ' + t.sections.convergence4;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>insights[3].querySelector('p').textContent = t.sections.convergence4desc;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>insights[4].querySelector('h3').textContent = '5. ' + t.sections.convergence5;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>insights[4].querySelector('p').textContent = t.sections.convergence5desc;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Regenerate tables with translated headers</p>
-<p class="p1"><span class="Apple-converted-space">            </span>generateAllTables();</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Update comparison if active</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (selectedSystems.length &gt; 0) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>updateComparison();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('langToggle').addEventListener('click', function() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentLang = currentLang === 'nl' ? 'en' : 'nl';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>this.textContent = currentLang === 'nl' ? '🌐 EN' : '🌐 NL';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>translatePage();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// DATA STRUCTURES</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const coreData = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 1, sefira: "Kether", chakra: "Sahasrara", hd: "Hoofd", function: "Pure bewustzijn", trigram: "☰ Qian", element: "Spirit/ether", wuxing: "Water→Wijsheid" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 2, sefira: "Chokmah", chakra: "Ajna", hd: "Ajna", function: "Inzicht/visie", trigram: "☱ Dui", element: "Lucht/ether", wuxing: "Metaal→Precisie" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 3, sefira: "Binah", chakra: "Vishuddha", hd: "Keel", function: "Begrip/expressie", trigram: "☲ Li", element: "Vuur/ruimte", wuxing: "Vuur→Expressie" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 4, sefira: "Chesed", chakra: "Anahata", hd: "G-centrum", function: "Liefde/richting", trigram: "☳ Zhen", element: "Lucht", wuxing: "Hout→Groei" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 5, sefira: "Gevurah", chakra: "Manipura", hd: "Hart/Ego", function: "Wil/afbakening", trigram: "☴ Xun", element: "Vuur", wuxing: "Vuur→Kracht" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 6, sefira: "Tiferet", chakra: "Manipura", hd: "Solar Plexus", function: "Emotie/balans", trigram: "☵ Kan", element: "Water", wuxing: "Aarde→Integratie" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 7, sefira: "Netzach", chakra: "Svadhisthana", hd: "Sacraal", function: "Levenskracht/creatie", trigram: "☶ Gen", element: "Aarde", wuxing: "Hout→Creatie" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 8, sefira: "Hod", chakra: "Svadhisthana", hd: "Milt", function: "Presentie/instinct", trigram: "☷ Kun", element: "Aarde", wuxing: "Aarde→Stabilisatie" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 9, sefira: "Yesod", chakra: "Muladhara", hd: "Root", function: "Druk/manifestatie", trigram: "—", element: "Aarde", wuxing: "Aarde→Drager" }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const philosophyData = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 1, jung: "Zelf", aurobindo: "Overmind", vedanta: "Sat", sufisme: "Fana fi'llah", gurdjieff: "Higher Emotional", spiral: "Turquoise" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 2, jung: "Intuition", aurobindo: "Intuitive Mind", vedanta: "Chit", sufisme: "Sirr", gurdjieff: "Higher Mental", spiral: "Yellow" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 3, jung: "Thinking", aurobindo: "Illumined Mind", vedanta: "Ananda", sufisme: "Ruh", gurdjieff: "Intellectual", spiral: "Green" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 4, jung: "Feeling", aurobindo: "Higher Mind", vedanta: "Vijnanamaya", sufisme: "Qalb", gurdjieff: "Higher Moving", spiral: "Orange" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 5, jung: "Sensation", aurobindo: "Mind Proper", vedanta: "Pranamaya", sufisme: "Nafs", gurdjieff: "Moving", spiral: "Red" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 6, jung: "—", aurobindo: "Vital", vedanta: "Pranamaya", sufisme: "Hawa", gurdjieff: "Emotional", spiral: "Blue" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 7, jung: "—", aurobindo: "Life-Force", vedanta: "Annamaya", sufisme: "Shahwa", gurdjieff: "Instinctive", spiral: "Purple" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 8, jung: "—", aurobindo: "Physical", vedanta: "Annamaya", sufisme: "Jism", gurdjieff: "—", spiral: "Beige" }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const neuroscienceData = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 1, neural: "Claustrum/Thalamus", iit: "Maximale integratie", workspace: "Global broadcasting", leary: "Neuro-atomic" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 2, neural: "Prefrontal cortex", iit: "Hoge Φ", workspace: "Executive attention", leary: "Neuro-genetic" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 3, neural: "Wernicke/Broca", iit: "Taal-integratie", workspace: "Language networks", leary: "Neuro-somatic" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 4, neural: "Anterior cingulate", iit: "Empathie-netwerk", workspace: "Social cognition", leary: "Socio-sexual" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 5, neural: "Dorsal attention", iit: "Conflict monitoring", workspace: "Cognitive control", leary: "Neuro-political" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 6, neural: "Default mode network", iit: "Self-referential", workspace: "Mind-wandering", leary: "Neuro-temporal" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 7, neural: "Limbic system", iit: "Emotie-integratie", workspace: "Salience network", leary: "Bio-survival" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 8, neural: "Insula/interoception", iit: "Body-awareness", workspace: "Interoceptive network", leary: "—" }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const psychedelicData = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ centrum: "Hoofd", dmt: "Ego dissolution", psilocybin: "Oceanic boundlessness", lsd: "Unity consciousness", mdma: "—", ketamine: "Hole experience", meditation: "Nirvikalpa samadhi" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ centrum: "Ajna", dmt: "Geometric visions", psilocybin: "Sacred geometry", lsd: "Fractal insights", mdma: "—", ketamine: "Dissociation", meditation: "Savikalpa samadhi" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ centrum: "Keel", dmt: "—", psilocybin: "Ineffability", lsd: "Creative expression", mdma: "Emotional openness", ketamine: "—", meditation: "Dharana" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ centrum: "G", dmt: "—", psilocybin: "Interconnectedness", lsd: "Love/compassion", mdma: "Heart opening", ketamine: "—", meditation: "Dhyana" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ centrum: "Ego", dmt: "—", psilocybin: "—", lsd: "Enhanced creativity", mdma: "Confidence", ketamine: "—", meditation: "Pratyahara" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ centrum: "Solar Plexus", dmt: "Body dissolution", psilocybin: "Emotional release", lsd: "Mood enhancement", mdma: "Empathy", ketamine: "Body detachment", meditation: "—" }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const archetypeData = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 1, jung: "Self", tarot: "World/Fool", greek: "Zeus/Ouranos", hindu: "Brahma", celtic: "Lugh/Odin", campbell: "Return" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 2, jung: "Wise Old Man", tarot: "Hermit/Magician", greek: "Hermes/Apollo", hindu: "Saraswati", celtic: "Lugh/Heimdall", campbell: "Revelation" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 3, jung: "Great Mother", tarot: "High Priestess", greek: "Athena/Hera", hindu: "Lakshmi", celtic: "Brigid/Frigg", campbell: "Transformation" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 4, jung: "Anima/Animus", tarot: "Lovers/Empress", greek: "Aphrodite/Eros", hindu: "Vishnu", celtic: "Danu/Freyr", campbell: "Meeting Goddess" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 5, jung: "Hero", tarot: "Emperor/Chariot", greek: "Ares/Hephaistos", hindu: "Indra", celtic: "Nuada/Thor", campbell: "Ordeal" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 6, jung: "Trickster", tarot: "Devil/Tower", greek: "Dionysus", hindu: "Shiva", celtic: "Loki", campbell: "Road of Trials" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 7, jung: "Shadow", tarot: "Death/Moon", greek: "Hades/Persephone", hindu: "Kali", celtic: "Morrigan/Hel", campbell: "Threshold Guardian" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 8, jung: "—", tarot: "Star/Sun", greek: "Pan/Gaia", hindu: "Ganesha", celtic: "Cernunnos/Jord", campbell: "Call to Adventure" }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const developmentData = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: "1-2", piaget: "Formal operational+", kohlberg: "Universal principles", gilligan: "Care/Justice integration", fowler: "Universalizing", beck: "Integral/Holistic", kegan: "Self-transforming" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: "3-4", piaget: "Formal operational", kohlberg: "Social contract", gilligan: "Contextual care", fowler: "Conjunctive", beck: "Integrative", kegan: "Self-authoring" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: "5-6", piaget: "Concrete operational", kohlberg: "Law and order", gilligan: "Relational responsibility", fowler: "Individuative", beck: "Achievist/Communitarian", kegan: "Socialized" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: "7-8", piaget: "Preoperational", kohlberg: "Interpersonal", gilligan: "Self-sacrifice", fowler: "Synthetic", beck: "Traditionalist", kegan: "Imperial" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: "9", piaget: "Sensorimotor", kohlberg: "Punishment avoidance", gilligan: "Survival", fowler: "Primal", beck: "Survivalist", kegan: "Incorporative" }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const musicData = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 1, interval: "Unison (1:1)", scale: "Chromatic", harmony: "Unity/Silence", freq: "432/528", instruments: "Silence/Om" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 2, interval: "Octave (2:1)", scale: "Whole tone", harmony: "Perfect resonance", freq: "216-432", instruments: "Crystal bowls" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 3, interval: "Perfect 5th (3:2)", scale: "Pentatonic", harmony: "Major triads", freq: "144-288", instruments: "Voice/mantra" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 4, interval: "Perfect 4th (4:3)", scale: "Major scales", harmony: "Heart harmonies", freq: "108-216", instruments: "Strings/harp" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 5, interval: "Major 3rd (5:4)", scale: "Minor scales", harmony: "Power chords", freq: "72-144", instruments: "Brass/wind" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 6, interval: "Minor 3rd (6:5)", scale: "Dorian/blues", harmony: "Emotional tensions", freq: "54-108", instruments: "Piano/percussion" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 7, interval: "Minor 2nd (16:15)", scale: "Phrygian", harmony: "Dissonance", freq: "36-72", instruments: "Drums/rhythm" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 8, interval: "Semitone (25:24)", scale: "Microtonal", harmony: "Primal sounds", freq: "18-36", instruments: "Body percussion" }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const colorData = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 1, color: "Wit/Helder", wavelength: "Alle/∞", chakraColor: "Wit/Goud", psychology: "Transcendentie", art: "Conceptual art" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 2, color: "Indigo/Violet", wavelength: "380-450", chakraColor: "Indigo", psychology: "Intuïtie/Wijsheid", art: "Suprematism" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 3, color: "Blauw", wavelength: "450-495", chakraColor: "Blauw", psychology: "Communicatie/Waarheid", art: "Expressionism" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 4, color: "Groen", wavelength: "495-570", chakraColor: "Groen", psychology: "Liefde/Balans", art: "Impressionism" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 5, color: "Geel", wavelength: "570-590", chakraColor: "Geel", psychology: "Wilskracht/Ego", art: "Cubism" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 6, color: "Oranje", wavelength: "590-620", chakraColor: "Oranje", psychology: "Emotie/Creativiteit", art: "Fauvism" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 7, color: "Rood", wavelength: "620-750", chakraColor: "Rood", psychology: "Passie/Vitaliteit", art: "Romanticism" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 8, color: "Zwart/Bruin", wavelength: "Absorptie", chakraColor: "—", psychology: "Grounding/Materie", art: "Realism" }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const geometryData = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 1, platonic: "Sphere/Point", geometry2d: "Circle", fractals: "Mandelbrot set", architecture: "Dome/Circle", mandala: "Yantra center" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 2, platonic: "Icosahedron", geometry2d: "Icosagon", fractals: "Julia sets", architecture: "Gothic spires", mandala: "Sri Yantra" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 3, platonic: "Dodecahedron", geometry2d: "Pentagon", fractals: "Sierpinski", architecture: "Pentagonal", mandala: "Flower of Life" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 4, platonic: "Octahedron", geometry2d: "Square", fractals: "Koch snowflake", architecture: "Square buildings", mandala: "Rose windows" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 5, platonic: "Hexahedron (Cube)", geometry2d: "Triangle", fractals: "Dragon curve", architecture: "Pyramids", mandala: "Triangular" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 6, platonic: "Tetrahedron", geometry2d: "—", fractals: "Cantor set", architecture: "Basic structures", mandala: "Cross patterns" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: "7-8", platonic: "—", geometry2d: "Line/Point", fractals: "Simple iterations", architecture: "Linear/Basic", mandala: "Simple mandalas" }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// TABLE GENERATION FUNCTIONS</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function generateTable(data, columns) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const t = translations[currentLang].tables;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let html = '&lt;thead&gt;&lt;tr&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>columns.forEach(col =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const label = t[col.key] || col.label;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>html += `&lt;th&gt;${label}&lt;/th&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>html += '&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;';</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>data.forEach(row =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;tr&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>columns.forEach(col =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>let value = row[col.key];</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (col.key === 'level' &amp;&amp; typeof value === 'number') {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>value = `&lt;span class="level-badge level-${value}"&gt;${value}&lt;/span&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>html += `&lt;td&gt;${value || '—'}&lt;/td&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p1"><span class="Apple-converted-space">                </span>html += '&lt;/tr&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>html += '&lt;/tbody&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>return html;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function generateAllTables() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const t = translations[currentLang].tables;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('coreTable').innerHTML = generateTable(coreData, [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'level' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'sefira' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'chakra' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'hd' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'function' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'trigram' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'element' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'wuxing' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('philosophyTable').innerHTML = generateTable(philosophyData, [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'level' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'jung' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'aurobindo' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'vedanta' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'sufisme' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'gurdjieff' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'spiral' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('neuroscienceTable').innerHTML = generateTable(neuroscienceData, [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'level' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'neural' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'iit' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'workspace' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'leary' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('psychedelicTable').innerHTML = generateTable(psychedelicData, [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'centrum' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'dmt' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'psilocybin' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'lsd' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'mdma' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'ketamine' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'meditation' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('archetypeTable').innerHTML = generateTable(archetypeData, [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'level' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'jung' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'tarot' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'greek' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'hindu' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'celtic' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'campbell' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('developmentTable').innerHTML = generateTable(developmentData, [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'level' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'piaget' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'kohlberg' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'gilligan' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'fowler' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'beck' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'kegan' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('musicTable').innerHTML = generateTable(musicData, [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'level' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'interval', label: 'Musical Intervals' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'scale', label: 'Scales' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'harmony', label: 'Harmonies' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'freq', label: 'Frequencies (Hz)' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'instruments', label: 'Instruments' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('colorTable').innerHTML = generateTable(colorData, [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'level' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'color', label: 'Colors' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'wavelength', label: 'Wavelength (nm)' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'chakraColor', label: 'Chakra Colors' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'psychology', label: 'Psychological Effect' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'art', label: 'Artistic Movements' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('geometryTable').innerHTML = generateTable(geometryData, [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'level' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'platonic', label: 'Platonic Solids' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'geometry2d', label: '2D Geometry' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'fractals', label: 'Fractals' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'architecture', label: 'Architecture' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ key: 'mandala', label: 'Mandala Patterns' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>]);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Initialize all tables</p>
-<p class="p1"><span class="Apple-converted-space">        </span>generateAllTables();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// NAVIGATION</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showSection(sectionId) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.section').forEach(s =&gt; s.classList.remove('active'));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.nav-btn').forEach(b =&gt; b.classList.remove('active'));</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById(sectionId).classList.add('active');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>event.target.classList.add('active');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// COMPARISON FUNCTIONALITY</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const allSystems = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'sefira', name: 'Sefira (Kabbala)', data: coreData, key: 'sefira' },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'chakra', name: 'Chakra', data: coreData, key: 'chakra' },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'hd', name: 'Human Design', data: coreData, key: 'hd' },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'jung', name: 'Jung', data: philosophyData, key: 'jung' },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'spiral', name: 'Spiral Dynamics', data: philosophyData, key: 'spiral' },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'neural', name: 'Neurale Netwerken', data: neuroscienceData, key: 'neural' },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'tarot', name: 'Tarot', data: archetypeData, key: 'tarot' },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'piaget', name: 'Piaget', data: developmentData, key: 'piaget' }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let selectedSystems = [];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function initComparison() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const selector = document.getElementById('systemSelector');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>allSystems.forEach(system =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const btn = document.createElement('button');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>btn.className = 'system-btn';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>btn.textContent = system.name;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>btn.onclick = () =&gt; toggleSystem(system.id, btn);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>selector.appendChild(btn);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function toggleSystem(systemId, btn) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const index = selectedSystems.indexOf(systemId);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (index &gt; -1) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>selectedSystems.splice(index, 1);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>btn.classList.remove('selected');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (selectedSystems.length &lt; 2) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>selectedSystems.push(systemId);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>btn.classList.add('selected');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateComparison();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function updateComparison() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const t = translations[currentLang];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const grid = document.getElementById('comparisonGrid');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid.innerHTML = '';</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (selectedSystems.length === 0) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grid.innerHTML = `&lt;p style="text-align: center; color: #00ffff;"&gt;${t.sections.compareSelect}&lt;/p&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>selectedSystems.forEach(sysId =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const system = allSystems.find(s =&gt; s.id === sysId);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const card = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>card.className = 'card';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>card.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;${system.name}&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;${t.tables.level}&lt;/th&gt;&lt;th&gt;${system.name}&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>${system.data.map(row =&gt; `</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;td&gt;&lt;span class="level-badge level-${row.level}"&gt;${row.level}&lt;/span&gt;&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;td&gt;${row[system.key] || '—'}&lt;/td&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/tr&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>`).join('')}</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/tbody&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/table&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grid.appendChild(card);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>initComparison();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// SEARCH FUNCTIONALITY</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const searchInput = document.getElementById('searchInput');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const searchResults = document.getElementById('searchResults');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>searchInput.addEventListener('input', (e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const t = translations[currentLang];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const query = e.target.value.toLowerCase().trim();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (query.length &lt; 2) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>searchResults.innerHTML = '';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const results = [];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const allData = [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: t.sections.coreTitle, data: coreData },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: t.sections.philosophyTitle, data: philosophyData },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: t.sections.neuroscienceTitle, data: neuroscienceData },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: t.sections.archetypeTitle, data: archetypeData },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: t.sections.developmentTitle, data: developmentData },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: t.sections.musicTitle, data: musicData },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: t.sections.colorTitle, data: colorData },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: t.sections.geometryTitle, data: geometryData }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>];</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>allData.forEach(category =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>category.data.forEach(row =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const rowText = JSON.stringify(row).toLowerCase();</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (rowText.includes(query)) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>results.push({ category: category.name, row: row });</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (results.length === 0) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>searchResults.innerHTML = `&lt;p style="text-align: center; color: #888;"&gt;${t.sections.searchNoResults}&lt;/p&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>searchResults.innerHTML = `&lt;h3&gt;${t.sections.searchFound} ${results.length} ${currentLang === 'nl' ? 'resultaten' : 'results'}:&lt;/h3&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>results.forEach(result =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const card = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>card.className = 'mini-card';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>card.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;strong&gt;${result.category}&lt;/strong&gt; - ${t.tables.level} ${result.row.level || result.row.level}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;br&gt;&lt;small&gt;${JSON.stringify(result.row).substring(0, 200)}...&lt;/small&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>searchResults.appendChild(card);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// THREE.JS VISUALIZATION</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const scene = new THREE.Scene();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>scene.fog = new THREE.Fog(0x000000, 1, 100);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const camera = new THREE.PerspectiveCamera(50, window.innerWidth / (window.innerHeight * 0.6), 0.1, 1000);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const container = document.getElementById('viz-container');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>renderer.setSize(container.clientWidth, container.clientHeight);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>renderer.setClearColor(0x000000, 0);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>container.appendChild(renderer.domElement);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>scene.add(new THREE.GridHelper(10, 10, 0x00ffff, 0x004444));</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const consciousnessLevels = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 1, color: 0xffffff, w: 0.1, radius: 0.3, label: "Kether" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 2, color: 0x4444ff, w: 0.2, radius: 0.4, label: "Chokmah" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 3, color: 0x00ffff, w: 0.3, radius: 0.5, label: "Binah" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 4, color: 0x00ff00, w: 0.4, radius: 0.6, label: "Chesed" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 5, color: 0xffff00, w: 0.5, radius: 0.7, label: "Gevurah" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 6, color: 0xffa500, w: 0.6, radius: 0.8, label: "Tiferet" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 7, color: 0xff00ff, w: 0.7, radius: 0.9, label: "Netzach" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 8, color: 0xff0000, w: 0.8, radius: 1.0, label: "Hod" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ level: 9, color: 0x8b4513, w: 0.9, radius: 1.1, label: "Yesod" }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const spheres = [];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>consciousnessLevels.forEach(level =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const geometry = new THREE.SphereGeometry(level.radius, 32, 32);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const material = new THREE.MeshPhongMaterial({<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>color: level.color,<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>shininess: 100,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>transparent: true,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>opacity: 0.7,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>emissive: level.color,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>emissiveIntensity: 0.2</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const sphere = new THREE.Mesh(geometry, material);</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>const theta = (level.level - 1) * (Math.PI * 2 / 9);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const r = 4;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>sphere.position.set(</p>
-<p class="p1"><span class="Apple-converted-space">                </span>r * Math.cos(theta),</p>
-<p class="p1"><span class="Apple-converted-space">                </span>level.w * 6 - 2,</p>
-<p class="p1"><span class="Apple-converted-space">                </span>r * Math.sin(theta)</p>
-<p class="p1"><span class="Apple-converted-space">            </span>);</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>sphere.userData = { level: level.level, label: level.label };</p>
-<p class="p1"><span class="Apple-converted-space">            </span>scene.add(sphere);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>spheres.push(sphere);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const ambientLight = new THREE.AmbientLight(0x404040, 0.8);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>scene.add(ambientLight);</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const pointLight1 = new THREE.PointLight(0x00ffff, 1, 100);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>pointLight1.position.set(10, 10, 10);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>scene.add(pointLight1);</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const pointLight2 = new THREE.PointLight(0xff00ff, 0.5, 100);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>pointLight2.position.set(-10, 5, -10);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>scene.add(pointLight2);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>camera.position.set(8, 5, 8);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>camera.lookAt(0, 2, 0);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let frame = 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const FRAME_MAX = 900;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let lastTime = Date.now();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function animate() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>requestAnimationFrame(animate);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const now = Date.now();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const delta = (now - lastTime) / 1000;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (delta &gt; 1/30) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const a1 = frame / FRAME_MAX;</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>spheres.forEach((sphere, index) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const level = consciousnessLevels[index];</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const theta = a1 * Math.PI * 2 + (level.level - 1) * (Math.PI * 2 / 9);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const r = 4 + Math.sin(a1 * Math.PI * 2) * 0.5;</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>sphere.position.set(</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>r * Math.cos(theta),</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>level.w * 6 - 2 + Math.sin(a1 * Math.PI * 4 + level.level) * 0.3,</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>r * Math.sin(theta)</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>);</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const axis = new THREE.Vector3(</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>Math.sin(a1 * Math.PI * level.level),</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>Math.cos(a1 * Math.PI * level.level),</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>1</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>).normalize();</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>sphere.quaternion.setFromAxisAngle(axis, a1 * Math.PI * 2 * level.level);</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>sphere.material.opacity = 0.5 + 0.3 * Math.sin(a1 * Math.PI * 2 * level.level);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>camera.position.x = 8 * Math.cos(a1 * Math.PI * 0.5);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>camera.position.z = 8 * Math.sin(a1 * Math.PI * 0.5);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>camera.lookAt(0, 2, 0);</p>
-<p class="p2"><span class="Apple-converted-space">                </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>renderer.render(scene, camera);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>frame = (frame + 30 * delta) % FRAME_MAX;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>lastTime = now;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>animate();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.addEventListener('resize', () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById('viz-container');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>camera.aspect = container.clientWidth / container.clientHeight;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>camera.updateProjectionMatrix();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>renderer.setSize(container.clientWidth, container.clientHeight);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+    <header>
+        <h1 id="mainTitle">Bewustzijns-Mapping Explorer</h1>
+        <p class="author">4D Quaternion Framework | J. Konstapel, Leiden 2025</p>
+        <button id="langToggle" class="nav-btn" style="position: absolute; top: 20px; right: 20px;">EN</button>
+    </header>
+
+    <nav id="mainNav">
+        <button class="nav-btn active" onclick="showSection('home')">Home</button>
+        <button class="nav-btn" onclick="showSection('core')">Kern Systemen</button>
+        <button class="nav-btn" onclick="showSection('philosophy')">Filosofie</button>
+        <button class="nav-btn" onclick="showSection('neuroscience')">Neuroscience</button>
+        <button class="nav-btn" onclick="showSection('development')">Ontwikkeling</button>
+        <button class="nav-btn" onclick="showSection('culture')">Cultuur & Kunst</button>
+        <button class="nav-btn" onclick="showSection('compare')">Vergelijken</button>
+        <button class="nav-btn" onclick="showSection('search')">Zoeken</button>
+    </nav>
+
+    <div class="container">
+        <div id="home" class="section active">
+            <div class="card">
+                <h2>Welkom bij de Bewustzijns-Mapping Explorer</h2>
+                <p>Deze interactieve website visualiseert de systematische mapping van bewustzijnssystemen gebaseerd op het principe dat alle tradities dezelfde paden beschrijven in een 4-dimensionale ruimte.</p>
+                
+                <div class="insight-box">
+                    <strong>Kern Inzicht:</strong> Alle bewustzijnstradities zijn topologisch equivalent - ze beschrijven dezelfde transformatiepaden maar gebruiken verschillende labels en coördinatensystemen.
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>4D Bewustzijnsruimte Visualisatie</h2>
+                <div id="viz-container"></div>
+                <p style="text-align: center; margin-top: 10px; color: #00ffff;">
+                    9 Bewustzijnsniveaus in dynamische 4D rotatie
+                </p>
+            </div>
+
+            <div class="card">
+                <h2>4D Bewustzijnsruimte Dimensies</h2>
+                <div class="grid-3">
+                    <div class="mini-card">
+                        <h3>1. Verticaal</h3>
+                        <p>Ontwikkelingsniveau en complexiteit</p>
+                    </div>
+                    <div class="mini-card">
+                        <h3>2. Horizontaal</h3>
+                        <p>Veranderingsrichting en modaliteit</p>
+                    </div>
+                    <div class="mini-card">
+                        <h3>3. Cyclisch</h3>
+                        <p>Temporele fase en ritme</p>
+                    </div>
+                    <div class="mini-card">
+                        <h3>4. Relationeel</h3>
+                        <p>Context en omgeving</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="core" class="section">
+            <div class="card">
+                <h2>Kern Bewustzijnscentra Mapping</h2>
+                <div class="table-container">
+                    <table id="coreTable"></table>
+                </div>
+            </div>
+        </div>
+
+        <div id="philosophy" class="section">
+            <div class="card">
+                <h2>Filosofische & Spirituele Tradities</h2>
+                <div class="table-container">
+                    <table id="philosophyTable"></table>
+                </div>
+            </div>
+        </div>
+
+        <div id="neuroscience" class="section">
+            <div class="card">
+                <h2>Neurowetenschappen & Bewustzijnsonderzoek</h2>
+                <div class="table-container">
+                    <table id="neuroscienceTable"></table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Psychedelisch Onderzoek</h2>
+                <div class="table-container">
+                    <table id="psychedelicTable"></table>
+                </div>
+            </div>
+        </div>
+
+        <div id="development" class="section">
+            <div class="card">
+                <h2>Archetypen & Mythologie</h2>
+                <div class="table-container">
+                    <table id="archetypeTable"></table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Ontwikkelingspsychologie</h2>
+                <div class="table-container">
+                    <table id="developmentTable"></table>
+                </div>
+            </div>
+        </div>
+
+        <div id="culture" class="section">
+            <div class="card">
+                <h2>Muziektheorie & Vibratie</h2>
+                <div class="table-container">
+                    <table id="musicTable"></table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Kleurenpsychologie & Licht</h2>
+                <div class="table-container">
+                    <table id="colorTable"></table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Geometrie & Sacrale Vorm</h2>
+                <div class="table-container">
+                    <table id="geometryTable"></table>
+                </div>
+            </div>
+        </div>
+
+        <div id="compare" class="section">
+            <div class="card">
+                <h2>Systemen Vergelijken</h2>
+                <p>Selecteer twee systemen om naast elkaar te vergelijken:</p>
+                
+                <div class="system-selector" id="systemSelector"></div>
+                
+                <div class="comparison-grid" id="comparisonGrid"></div>
+            </div>
+
+            <div class="card">
+                <h2>Convergentie Patronen</h2>
+                <div class="insight-box">
+                    <h3>1. Verticale Progressie</h3>
+                    <p>Alle systemen tonen beweging van materieel → emotioneel → mentaal → spiritueel</p>
+                </div>
+                <div class="insight-box">
+                    <h3>2. Integratie op Niveau 6</h3>
+                    <p>Bijna alle systemen hebben een integratief/balancerend element rond niveau 6 (Tiferet/Solar Plexus/Oranje)</p>
+                </div>
+                <div class="insight-box">
+                    <h3>3. Transcendentie op Niveau 1-2</h3>
+                    <p>Universele erkenning van transcendente toestanden aan de top</p>
+                </div>
+                <div class="insight-box">
+                    <h3>4. Survival/Instinct Base</h3>
+                    <p>Alle systemen erkennen basale overlevingslagen (7-8-9)</p>
+                </div>
+                <div class="insight-box">
+                    <h3>5. Heart/Love Center</h3>
+                    <p>Consistent hart/liefde centrum rond niveau 4 (Chesed/Anahata/G-centrum)</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="search" class="section">
+            <div class="card">
+                <h2>Zoeken in Alle Systemen</h2>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Zoek een concept, niveau, of term...">
+                </div>
+                <div id="searchResults"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        let currentLang = 'nl';
+        
+        const translations = {
+            nl: {
+                mainTitle: "Bewustzijns-Mapping Explorer",
+                nav: {
+                    home: "Home",
+                    core: "Kern Systemen",
+                    philosophy: "Filosofie",
+                    neuroscience: "Neuroscience",
+                    development: "Ontwikkeling",
+                    culture: "Cultuur & Kunst",
+                    compare: "Vergelijken",
+                    search: "Zoeken"
+                }
+            },
+            en: {
+                mainTitle: "Consciousness Mapping Explorer",
+                nav: {
+                    home: "Home",
+                    core: "Core Systems",
+                    philosophy: "Philosophy",
+                    neuroscience: "Neuroscience",
+                    development: "Development",
+                    culture: "Culture & Art",
+                    compare: "Compare",
+                    search: "Search"
+                }
+            }
+        };
+
+        const coreData = [
+            { level: 1, sefira: "Kether", chakra: "Sahasrara", hd: "Hoofd", function: "Pure bewustzijn", trigram: "☰ Qian", element: "Spirit/ether", wuxing: "Water→Wijsheid" },
+            { level: 2, sefira: "Chokmah", chakra: "Ajna", hd: "Ajna", function: "Inzicht/visie", trigram: "☱ Dui", element: "Lucht/ether", wuxing: "Metaal→Precisie" },
+            { level: 3, sefira: "Binah", chakra: "Vishuddha", hd: "Keel", function: "Begrip/expressie", trigram: "☲ Li", element: "Vuur/ruimte", wuxing: "Vuur→Expressie" },
+            { level: 4, sefira: "Chesed", chakra: "Anahata", hd: "G-centrum", function: "Liefde/richting", trigram: "☳ Zhen", element: "Lucht", wuxing: "Hout→Groei" },
+            { level: 5, sefira: "Gevurah", chakra: "Manipura", hd: "Hart/Ego", function: "Wil/afbakening", trigram: "☴ Xun", element: "Vuur", wuxing: "Vuur→Kracht" },
+            { level: 6, sefira: "Tiferet", chakra: "Manipura", hd: "Solar Plexus", function: "Emotie/balans", trigram: "☵ Kan", element: "Water", wuxing: "Aarde→Integratie" },
+            { level: 7, sefira: "Netzach", chakra: "Svadhisthana", hd: "Sacraal", function: "Levenskracht/creatie", trigram: "☶ Gen", element: "Aarde", wuxing: "Hout→Creatie" },
+            { level: 8, sefira: "Hod", chakra: "Svadhisthana", hd: "Milt", function: "Presentie/instinct", trigram: "☷ Kun", element: "Aarde", wuxing: "Aarde→Stabilisatie" },
+            { level: 9, sefira: "Yesod", chakra: "Muladhara", hd: "Root", function: "Druk/manifestatie", trigram: "—", element: "Aarde", wuxing: "Aarde→Drager" }
+        ];
+
+        const philosophyData = [
+            { level: 1, jung: "Zelf", aurobindo: "Overmind", vedanta: "Sat", sufisme: "Fana fi'llah", gurdjieff: "Higher Emotional", spiral: "Turquoise" },
+            { level: 2, jung: "Intuition", aurobindo: "Intuitive Mind", vedanta: "Chit", sufisme: "Sirr", gurdjieff: "Higher Mental", spiral: "Yellow" },
+            { level: 3, jung: "Thinking", aurobindo: "Illumined Mind", vedanta: "Ananda", sufisme: "Ruh", gurdjieff: "Intellectual", spiral: "Green" },
+            { level: 4, jung: "Feeling", aurobindo: "Higher Mind", vedanta: "Vijnanamaya", sufisme: "Qalb", gurdjieff: "Higher Moving", spiral: "Orange" },
+            { level: 5, jung: "Sensation", aurobindo: "Mind Proper", vedanta: "Pranamaya", sufisme: "Nafs", gurdjieff: "Moving", spiral: "Red" },
+            { level: 6, jung: "—", aurobindo: "Vital", vedanta: "Pranamaya", sufisme: "Hawa", gurdjieff: "Emotional", spiral: "Blue" },
+            { level: 7, jung: "—", aurobindo: "Life-Force", vedanta: "Annamaya", sufisme: "Shahwa", gurdjieff: "Instinctive", spiral: "Purple" },
+            { level: 8, jung: "—", aurobindo: "Physical", vedanta: "Annamaya", sufisme: "Jism", gurdjieff: "—", spiral: "Beige" }
+        ];
+
+        const neuroscienceData = [
+            { level: 1, neural: "Claustrum/Thalamus", iit: "Maximale integratie", workspace: "Global broadcasting", leary: "Neuro-atomic" },
+            { level: 2, neural: "Prefrontal cortex", iit: "Hoge Φ", workspace: "Executive attention", leary: "Neuro-genetic" },
+            { level: 3, neural: "Wernicke/Broca", iit: "Taal-integratie", workspace: "Language networks", leary: "Neuro-somatic" },
+            { level: 4, neural: "Anterior cingulate", iit: "Empathie-netwerk", workspace: "Social cognition", leary: "Socio-sexual" },
+            { level: 5, neural: "Dorsal attention", iit: "Conflict monitoring", workspace: "Cognitive control", leary: "Neuro-political" },
+            { level: 6, neural: "Default mode network", iit: "Self-referential", workspace: "Mind-wandering", leary: "Neuro-temporal" },
+            { level: 7, neural: "Limbic system", iit: "Emotie-integratie", workspace: "Salience network", leary: "Bio-survival" },
+            { level: 8, neural: "Insula/interoception", iit: "Body-awareness", workspace: "Interoceptive network", leary: "—" }
+        ];
+
+        const psychedelicData = [
+            { centrum: "Hoofd", dmt: "Ego dissolution", psilocybin: "Oceanic boundlessness", lsd: "Unity consciousness", mdma: "—", ketamine: "Hole experience", meditation: "Nirvikalpa samadhi" },
+            { centrum: "Ajna", dmt: "Geometric visions", psilocybin: "Sacred geometry", lsd: "Fractal insights", mdma: "—", ketamine: "Dissociation", meditation: "Savikalpa samadhi" },
+            { centrum: "Keel", dmt: "—", psilocybin: "Ineffability", lsd: "Creative expression", mdma: "Emotional openness", ketamine: "—", meditation: "Dharana" },
+            { centrum: "G", dmt: "—", psilocybin: "Interconnectedness", lsd: "Love/compassion", mdma: "Heart opening", ketamine: "—", meditation: "Dhyana" },
+            { centrum: "Ego", dmt: "—", psilocybin: "—", lsd: "Enhanced creativity", mdma: "Confidence", ketamine: "—", meditation: "Pratyahara" },
+            { centrum: "Solar Plexus", dmt: "Body dissolution", psilocybin: "Emotional release", lsd: "Mood enhancement", mdma: "Empathy", ketamine: "Body detachment", meditation: "—" }
+        ];
+
+        const archetypeData = [
+            { level: 1, jung: "Self", tarot: "World/Fool", greek: "Zeus/Ouranos", hindu: "Brahma", celtic: "Lugh/Odin", campbell: "Return" },
+            { level: 2, jung: "Wise Old Man", tarot: "Hermit/Magician", greek: "Hermes/Apollo", hindu: "Saraswati", celtic: "Lugh/Heimdall", campbell: "Revelation" },
+            { level: 3, jung: "Great Mother", tarot: "High Priestess", greek: "Athena/Hera", hindu: "Lakshmi", celtic: "Brigid/Frigg", campbell: "Transformation" },
+            { level: 4, jung: "Anima/Animus", tarot: "Lovers/Empress", greek: "Aphrodite/Eros", hindu: "Vishnu", celtic: "Danu/Freyr", campbell: "Meeting Goddess" },
+            { level: 5, jung: "Hero", tarot: "Emperor/Chariot", greek: "Ares/Hephaistos", hindu: "Indra", celtic: "Nuada/Thor", campbell: "Ordeal" },
+            { level: 6, jung: "Trickster", tarot: "Devil/Tower", greek: "Dionysus", hindu: "Shiva", celtic: "Loki", campbell: "Road of Trials" },
+            { level: 7, jung: "Shadow", tarot: "Death/Moon", greek: "Hades/Persephone", hindu: "Kali", celtic: "Morrigan/Hel", campbell: "Threshold Guardian" },
+            { level: 8, jung: "—", tarot: "Star/Sun", greek: "Pan/Gaia", hindu: "Ganesha", celtic: "Cernunnos/Jord", campbell: "Call to Adventure" }
+        ];
+
+        const developmentData = [
+            { level: "1-2", piaget: "Formal operational+", kohlberg: "Universal principles", gilligan: "Care/Justice integration", fowler: "Universalizing", beck: "Integral/Holistic", kegan: "Self-transforming" },
+            { level: "3-4", piaget: "Formal operational", kohlberg: "Social contract", gilligan: "Contextual care", fowler: "Conjunctive", beck: "Integrative", kegan: "Self-authoring" },
+            { level: "5-6", piaget: "Concrete operational", kohlberg: "Law and order", gilligan: "Relational responsibility", fowler: "Individuative", beck: "Achievist/Communitarian", kegan: "Socialized" },
+            { level: "7-8", piaget: "Preoperational", kohlberg: "Interpersonal", gilligan: "Self-sacrifice", fowler: "Synthetic", beck: "Traditionalist", kegan: "Imperial" },
+            { level: "9", piaget: "Sensorimotor", kohlberg: "Punishment avoidance", gilligan: "Survival", fowler: "Primal", beck: "Survivalist", kegan: "Incorporative" }
+        ];
+
+        const musicData = [
+            { level: 1, interval: "Unison (1:1)", scale: "Chromatic", harmony: "Unity/Silence", freq: "432/528", instruments: "Silence/Om" },
+            { level: 2, interval: "Octave (2:1)", scale: "Whole tone", harmony: "Perfect resonance", freq: "216-432", instruments: "Crystal bowls" },
+            { level: 3, interval: "Perfect 5th (3:2)", scale: "Pentatonic", harmony: "Major triads", freq: "144-288", instruments: "Voice/mantra" },
+            { level: 4, interval: "Perfect 4th (4:3)", scale: "Major scales", harmony: "Heart harmonies", freq: "108-216", instruments: "Strings/harp" },
+            { level: 5, interval: "Major 3rd (5:4)", scale: "Minor scales", harmony: "Power chords", freq: "72-144", instruments: "Brass/wind" },
+            { level: 6, interval: "Minor 3rd (6:5)", scale: "Dorian/blues", harmony: "Emotional tensions", freq: "54-108", instruments: "Piano/percussion" },
+            { level: 7, interval: "Minor 2nd (16:15)", scale: "Phrygian", harmony: "Dissonance", freq: "36-72", instruments: "Drums/rhythm" },
+            { level: 8, interval: "Semitone (25:24)", scale: "Microtonal", harmony: "Primal sounds", freq: "18-36", instruments: "Body percussion" }
+        ];
+
+        const colorData = [
+            { level: 1, color: "Wit/Helder", wavelength: "Alle/∞", chakraColor: "Wit/Goud", psychology: "Transcendentie", art: "Conceptual art" },
+            { level: 2, color: "Indigo/Violet", wavelength: "380-450", chakraColor: "Indigo", psychology: "Intuïtie/Wijsheid", art: "Suprematism" },
+            { level: 3, color: "Blauw", wavelength: "450-495", chakraColor: "Blauw", psychology: "Communicatie/Waarheid", art: "Expressionism" },
+            { level: 4, color: "Groen", wavelength: "495-570", chakraColor: "Groen", psychology: "Liefde/Balans", art: "Impressionism" },
+            { level: 5, color: "Geel", wavelength: "570-590", chakraColor: "Geel", psychology: "Wilskracht/Ego", art: "Cubism" },
+            { level: 6, color: "Oranje", wavelength: "590-620", chakraColor: "Oranje", psychology: "Emotie/Creativiteit", art: "Fauvism" },
+            { level: 7, color: "Rood", wavelength: "620-750", chakraColor: "Rood", psychology: "Passie/Vitaliteit", art: "Romanticism" },
+            { level: 8, color: "Zwart/Bruin", wavelength: "Absorptie", chakraColor: "—", psychology: "Grounding/Materie", art: "Realism" }
+        ];
+
+        const geometryData = [
+            { level: 1, platonic: "Sphere/Point", geometry2d: "Circle", fractals: "Mandelbrot set", architecture: "Dome/Circle", mandala: "Yantra center" },
+            { level: 2, platonic: "Icosahedron", geometry2d: "Icosagon", fractals: "Julia sets", architecture: "Gothic spires", mandala: "Sri Yantra" },
+            { level: 3, platonic: "Dodecahedron", geometry2d: "Pentagon", fractals: "Sierpinski", architecture: "Pentagonal", mandala: "Flower of Life" },
+            { level: 4, platonic: "Octahedron", geometry2d: "Square", fractals: "Koch snowflake", architecture: "Square buildings", mandala: "Rose windows" },
+            { level: 5, platonic: "Hexahedron (Cube)", geometry2d: "Triangle", fractals: "Dragon curve", architecture: "Pyramids", mandala: "Triangular" },
+            { level: 6, platonic: "Tetrahedron", geometry2d: "—", fractals: "Cantor set", architecture: "Basic structures", mandala: "Cross patterns" },
+            { level: "7-8", platonic: "—", geometry2d: "Line/Point", fractals: "Simple iterations", architecture: "Linear/Basic", mandala: "Simple mandalas" }
+        ];
+
+        function generateTable(data, columns) {
+            let html = '<thead><tr>';
+            columns.forEach(col => {
+                html += `<th>${col.label}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+            
+            data.forEach(row => {
+                html += '<tr>';
+                columns.forEach(col => {
+                    let value = row[col.key];
+                    if (col.key === 'level' && typeof value === 'number') {
+                        value = `<span class="level-badge level-${value}">${value}</span>`;
+                    }
+                    html += `<td>${value || '—'}</td>`;
+                });
+                html += '</tr>';
+            });
+            
+            html += '</tbody>';
+            return html;
+        }
+
+        function generateAllTables() {
+            document.getElementById('coreTable').innerHTML = generateTable(coreData, [
+                { key: 'level', label: 'Niveau' },
+                { key: 'sefira', label: 'Sefira' },
+                { key: 'chakra', label: 'Chakra' },
+                { key: 'hd', label: 'HD-Centrum' },
+                { key: 'function', label: 'Functie' },
+                { key: 'trigram', label: 'Trigram' },
+                { key: 'element', label: '4-Element' },
+                { key: 'wuxing', label: 'Wu-Xing' }
+            ]);
+
+            document.getElementById('philosophyTable').innerHTML = generateTable(philosophyData, [
+                { key: 'level', label: 'Niveau' },
+                { key: 'jung', label: 'Jung' },
+                { key: 'aurobindo', label: 'Sri Aurobindo' },
+                { key: 'vedanta', label: 'Vedanta' },
+                { key: 'sufisme', label: 'Sufisme' },
+                { key: 'gurdjieff', label: 'Gurdjieff' },
+                { key: 'spiral', label: 'Spiral Dynamics' }
+            ]);
+
+            document.getElementById('neuroscienceTable').innerHTML = generateTable(neuroscienceData, [
+                { key: 'level', label: 'Niveau' },
+                { key: 'neural', label: 'Neurale Netwerken' },
+                { key: 'iit', label: 'IIT Φ-complexiteit' },
+                { key: 'workspace', label: 'Global Workspace' },
+                { key: 'leary', label: 'Leary 8-Circuit' }
+            ]);
+
+            document.getElementById('psychedelicTable').innerHTML = generateTable(psychedelicData, [
+                { key: 'centrum', label: 'Centrum' },
+                { key: 'dmt', label: '5-MeO-DMT' },
+                { key: 'psilocybin', label: 'Psilocybin' },
+                { key: 'lsd', label: 'LSD' },
+                { key: 'mdma', label: 'MDMA' },
+                { key: 'ketamine', label: 'Ketamine' },
+                { key: 'meditation', label: 'Meditation States' }
+            ]);
+
+            document.getElementById('archetypeTable').innerHTML = generateTable(archetypeData, [
+                { key: 'level', label: 'Niveau' },
+                { key: 'jung', label: 'Jung' },
+                { key: 'tarot', label: 'Tarot Majors' },
+                { key: 'greek', label: 'Greek Gods' },
+                { key: 'hindu', label: 'Hindu Devas' },
+                { key: 'celtic', label: 'Celtic/Nordic' },
+                { key: 'campbell', label: 'Campbell Hero' }
+            ]);
+
+            document.getElementById('developmentTable').innerHTML = generateTable(developmentData, [
+                { key: 'level', label: 'Niveau' },
+                { key: 'piaget', label: 'Piaget' },
+                { key: 'kohlberg', label: 'Kohlberg' },
+                { key: 'gilligan', label: 'Gilligan' },
+                { key: 'fowler', label: 'Fowler Faith' },
+                { key: 'beck', label: 'Beck & Cowan' },
+                { key: 'kegan', label: 'Kegan' }
+            ]);
+
+            document.getElementById('musicTable').innerHTML = generateTable(musicData, [
+                { key: 'level', label: 'Niveau' },
+                { key: 'interval', label: 'Musical Intervals' },
+                { key: 'scale', label: 'Scales' },
+                { key: 'harmony', label: 'Harmonies' },
+                { key: 'freq', label: 'Frequencies (Hz)' },
+                { key: 'instruments', label: 'Instruments' }
+            ]);
+
+            document.getElementById('colorTable').innerHTML = generateTable(colorData, [
+                { key: 'level', label: 'Niveau' },
+                { key: 'color', label: 'Colors' },
+                { key: 'wavelength', label: 'Wavelength (nm)' },
+                { key: 'chakraColor', label: 'Chakra Colors' },
+                { key: 'psychology', label: 'Psychological Effect' },
+                { key: 'art', label: 'Artistic Movements' }
+            ]);
+
+            document.getElementById('geometryTable').innerHTML = generateTable(geometryData, [
+                { key: 'level', label: 'Niveau' },
+                { key: 'platonic', label: 'Platonic Solids' },
+                { key: 'geometry2d', label: '2D Geometry' },
+                { key: 'fractals', label: 'Fractals' },
+                { key: 'architecture', label: 'Architecture' },
+                { key: 'mandala', label: 'Mandala Patterns' }
+            ]);
+        }
+
+        generateAllTables();
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        const allSystems = [
+            { id: 'sefira', name: 'Sefira (Kabbala)', data: coreData, key: 'sefira' },
+            { id: 'chakra', name: 'Chakra', data: coreData, key: 'chakra' },
+            { id: 'hd', name: 'Human Design', data: coreData, key: 'hd' },
+            { id: 'jung', name: 'Jung', data: philosophyData, key: 'jung' },
+            { id: 'spiral', name: 'Spiral Dynamics', data: philosophyData, key: 'spiral' },
+            { id: 'neural', name: 'Neurale Netwerken', data: neuroscienceData, key: 'neural' },
+            { id: 'tarot', name: 'Tarot', data: archetypeData, key: 'tarot' },
+            { id: 'piaget', name: 'Piaget', data: developmentData, key: 'piaget' }
+        ];
+
+        let selectedSystems = [];
+
+        function initComparison() {
+            const selector = document.getElementById('systemSelector');
+            allSystems.forEach(system => {
+                const btn = document.createElement('button');
+                btn.className = 'system-btn';
+                btn.textContent = system.name;
+                btn.onclick = () => toggleSystem(system.id, btn);
+                selector.appendChild(btn);
+            });
+        }
+
+        function toggleSystem(systemId, btn) {
+            const index = selectedSystems.indexOf(systemId);
+            if (index > -1) {
+                selectedSystems.splice(index, 1);
+                btn.classList.remove('selected');
+            } else {
+                if (selectedSystems.length < 2) {
+                    selectedSystems.push(systemId);
+                    btn.classList.add('selected');
+                }
+            }
+            updateComparison();
+        }
+
+        function updateComparison() {
+            const grid = document.getElementById('comparisonGrid');
+            grid.innerHTML = '';
+            
+            if (selectedSystems.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: #00ffff;">Selecteer twee systemen om te vergelijken</p>';
+                return;
+            }
+            
+            selectedSystems.forEach(sysId => {
+                const system = allSystems.find(s => s.id === sysId);
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>${system.name}</h3>
+                    <table>
+                        <thead><tr><th>Niveau</th><th>${system.name}</th></tr></thead>
+                        <tbody>
+                            ${system.data.map(row => `
+                                <tr>
+                                    <td><span class="level-badge level-${row.level}">${row.level}</span></td>
+                                    <td>${row[system.key] || '—'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        initComparison();
+
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (query.length < 2) {
+                searchResults.innerHTML = '';
+                return;
+            }
+            
+            const results = [];
+            const allData = [
+                { name: 'Kern Systemen', data: coreData },
+                { name: 'Filosofie', data: philosophyData },
+                { name: 'Neuroscience', data: neuroscienceData },
+                { name: 'Archetypen', data: archetypeData },
+                { name: 'Ontwikkeling', data: developmentData },
+                { name: 'Muziek', data: musicData },
+                { name: 'Kleur', data: colorData },
+                { name: 'Geometrie', data: geometryData }
+            ];
+            
+            allData.forEach(category => {
+                category.data.forEach(row => {
+                    const rowText = JSON.stringify(row).toLowerCase();
+                    if (rowText.includes(query)) {
+                        results.push({ category: category.name, row: row });
+                    }
+                });
+            });
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<p style="text-align: center; color: #888;">Geen resultaten gevonden</p>';
+                return;
+            }
+            
+            searchResults.innerHTML = `<h3>Gevonden ${results.length} resultaten:</h3>`;
+            results.forEach(result => {
+                const card = document.createElement('div');
+                card.className = 'mini-card';
+                card.innerHTML = `
+                    <strong>${result.category}</strong> - Niveau ${result.row.level || result.row.level}
+                    <br><small>${JSON.stringify(result.row).substring(0, 200)}...</small>
+                `;
+                searchResults.appendChild(card);
+            });
+        });
+
+        document.getElementById('langToggle').addEventListener('click', function() {
+            currentLang = currentLang === 'nl' ? 'en' : 'nl';
+            this.textContent = currentLang === 'nl' ? 'EN' : 'NL';
+            document.getElementById('mainTitle').textContent = translations[currentLang].mainTitle;
+            const navBtns = document.querySelectorAll('#mainNav .nav-btn');
+            const navKeys = Object.keys(translations[currentLang].nav);
+            navBtns.forEach((btn, i) => {
+                btn.textContent = translations[currentLang].nav[navKeys[i]];
+            });
+        });
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / (window.innerHeight * 0.6), 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        const container = document.getElementById('viz-container');
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setClearColor(0x000000, 0);
+        container.appendChild(renderer.domElement);
+
+        const consciousnessLevels = [
+            { level: 1, color: 0xffffff, w: 0.1, radius: 0.3 },
+            { level: 2, color: 0x4444ff, w: 0.2, radius: 0.4 },
+            { level: 3, color: 0x00ffff, w: 0.3, radius: 0.5 },
+            { level: 4, color: 0x00ff00, w: 0.4, radius: 0.6 },
+            { level: 5, color: 0xffff00, w: 0.5, radius: 0.7 },
+            { level: 6, color: 0xffa500, w: 0.6, radius: 0.8 },
+            { level: 7, color: 0xff00ff, w: 0.7, radius: 0.9 },
+            { level: 8, color: 0xff0000, w: 0.8, radius: 1.0 },
+            { level: 9, color: 0x8b4513, w: 0.9, radius: 1.1 }
+        ];
+
+        const spheres = [];
+        consciousnessLevels.forEach(level => {
+            const geometry = new THREE.SphereGeometry(level.radius, 32, 32);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: level.color, 
+                shininess: 100,
+                transparent: true,
+                opacity: 0.7,
+                emissive: level.color,
+                emissiveIntensity: 0.2
+            });
+            const sphere = new THREE.Mesh(geometry, material);
+            
+            const theta = (level.level - 1) * (Math.PI * 2 / 9);
+            const r = 4;
+            sphere.position.set(
+                r * Math.cos(theta),
+                level.w * 6 - 2,
+                r * Math.sin(theta)
+            );
+            
+            scene.add(sphere);
+            spheres.push(sphere);
+        });
+
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.8);
+        scene.add(ambientLight);
+        
+        const pointLight1 = new THREE.PointLight(0x00ffff, 1, 100);
+        pointLight1.position.set(10, 10, 10);
+        scene.add(pointLight1);
+        
+        const pointLight2 = new THREE.PointLight(0xff00ff, 0.5, 100);
+        pointLight2.position.set(-10, 5, -10);
+        scene.add(pointLight2);
+
+        camera.position.set(8, 5, 8);
+        camera.lookAt(0, 2, 0);
+
+        let frame = 0;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const t = frame * 0.01;
+            
+            spheres.forEach((sphere, index) => {
+                const level = consciousnessLevels[index];
+                const theta = t + (level.level - 1) * (Math.PI * 2 / 9);
+                const r = 4 + Math.sin(t) * 0.5;
+                
+                sphere.position.set(
+                    r * Math.cos(theta),
+                    level.w * 6 - 2 + Math.sin(t * 2 + level.level) * 0.3,
+                    r * Math.sin(theta)
+                );
+                
+                sphere.rotation.x += 0.01 * level.level;
+                sphere.rotation.y += 0.01 * level.level;
+                
+                sphere.material.opacity = 0.5 + 0.3 * Math.sin(t * level.level);
+            });
+            
+            camera.position.x = 8 * Math.cos(t * 0.2);
+            camera.position.z = 8 * Math.sin(t * 0.2);
+            camera.lookAt(0, 2, 0);
+            
+            renderer.render(scene, camera);
+            frame++;
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            const container = document.getElementById('viz-container');
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+    </script>
 </body>
 </html>
