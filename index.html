@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bewustzijns-Mapping Explorer - 4D Quaternion Framework</title>
+    <title>Bewustzijns-Mapping Explorer - 4D Framework</title>
     <style>
         * {
             margin: 0;
@@ -161,6 +161,7 @@
         .level-7 { background: #ff00ff; color: #fff; }
         .level-8 { background: #ff0000; color: #fff; }
         .level-9 { background: #8b4513; color: #fff; }
+        .level-10 { background: #000000; color: #fff; }
 
         #viz-container {
             width: 100%;
@@ -233,6 +234,14 @@
             border-radius: 5px;
         }
 
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(255, 69, 0, 0.1) 100%);
+            border-left: 4px solid #ffa500;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -257,9 +266,9 @@
 </head>
 <body>
     <header>
-        <h1 id="mainTitle">Bewustzijns-Mapping Explorer</h1>
-        <p class="author">4D Quaternion Framework | J. Konstapel, Leiden 2025</p>
-        <button id="langToggle" class="nav-btn" style="position: absolute; top: 20px; right: 20px;">EN</button>
+        <h1 id="mainTitle">🌀 Bewustzijns-Mapping Explorer</h1>
+        <p class="author">4D Framework | J. Konstapel, Leiden 2025</p>
+        <button id="langToggle" class="nav-btn" style="position: absolute; top: 20px; right: 20px;">🌐 EN</button>
     </header>
 
     <nav id="mainNav">
@@ -277,10 +286,14 @@
         <div id="home" class="section active">
             <div class="card">
                 <h2>Welkom bij de Bewustzijns-Mapping Explorer</h2>
-                <p>Deze interactieve website visualiseert de systematische mapping van bewustzijnssystemen gebaseerd op het principe dat alle tradities dezelfde paden beschrijven in een 4-dimensionale ruimte.</p>
+                <p>Deze interactieve website visualiseert de systematische mapping van bewustzijnssystemen gebaseerd op het principe dat verschillende tradities vergelijkbare paden beschrijven in een 4-dimensionale ontwikkelingsruimte.</p>
                 
                 <div class="insight-box">
-                    <strong>Kern Inzicht:</strong> Alle bewustzijnstradities zijn topologisch equivalent - ze beschrijven dezelfde transformatiepaden maar gebruiken verschillende labels en coördinatensystemen.
+                    <strong>Kern Hypothese:</strong> Bewustzijnstradities vertonen structurele overeenkomsten - ze beschrijven vergelijkbare transformatiepaden maar gebruiken verschillende conceptuele kaders en terminologie.
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Methodologische Notitie:</strong> Dit framework presenteert vergelijkende correspondences tussen systemen uit verschillende epistemologische domeinen (spirituele tradities, psychologie, neuroscience). Deze mappings zijn interpretatief en speculatief, geen empirisch gevalideerde equivalenties.
                 </div>
             </div>
 
@@ -288,7 +301,7 @@
                 <h2>4D Bewustzijnsruimte Visualisatie</h2>
                 <div id="viz-container"></div>
                 <p style="text-align: center; margin-top: 10px; color: #00ffff;">
-                    9 Bewustzijnsniveaus in dynamische 4D rotatie
+                    ✨ 10 Bewustzijnsniveaus in dynamische 4D rotatie
                 </p>
             </div>
 
@@ -297,19 +310,19 @@
                 <div class="grid-3">
                     <div class="mini-card">
                         <h3>1. Verticaal</h3>
-                        <p>Ontwikkelingsniveau en complexiteit</p>
+                        <p>Ontwikkelingsniveau en complexiteit (0-10 schaal)</p>
                     </div>
                     <div class="mini-card">
                         <h3>2. Horizontaal</h3>
-                        <p>Veranderingsrichting en modaliteit</p>
+                        <p>Veranderingsrichting en cognitieve modaliteit</p>
                     </div>
                     <div class="mini-card">
                         <h3>3. Cyclisch</h3>
-                        <p>Temporele fase en ritme</p>
+                        <p>Temporele fase en periodieke processen</p>
                     </div>
                     <div class="mini-card">
                         <h3>4. Relationeel</h3>
-                        <p>Context en omgeving</p>
+                        <p>Contextuele factoren en omgeving</p>
                     </div>
                 </div>
             </div>
@@ -336,6 +349,9 @@
         <div id="neuroscience" class="section">
             <div class="card">
                 <h2>Neurowetenschappen & Bewustzijnsonderzoek</h2>
+                <div class="warning-box">
+                    <strong>⚠️ Disclaimer:</strong> De hieronder gepresenteerde neurowetenschappelijke correspondences zijn speculatief en exploratief. Ze vertegenwoordigen geen wetenschappelijke consensus over neurale correlaten van bewustzijnsniveaus.
+                </div>
                 <div class="table-container">
                     <table id="neuroscienceTable"></table>
                 </div>
@@ -343,6 +359,9 @@
             
             <div class="card">
                 <h2>Psychedelisch Onderzoek</h2>
+                <div class="warning-box">
+                    <strong>⚠️ Disclaimer:</strong> Fenomenologische beschrijvingen gebaseerd op ervaring-rapporten en onderzoeksliteratuur. Niet bedoeld als medisch advies.
+                </div>
                 <div class="table-container">
                     <table id="psychedelicTable"></table>
                 </div>
@@ -402,23 +421,23 @@
                 <h2>Convergentie Patronen</h2>
                 <div class="insight-box">
                     <h3>1. Verticale Progressie</h3>
-                    <p>Alle systemen tonen beweging van materieel → emotioneel → mentaal → spiritueel</p>
+                    <p>Cross-culturele patroon: materieel/fysiek → emotioneel/relationeel → mentaal/symbolisch → transcendent/integratief</p>
                 </div>
                 <div class="insight-box">
-                    <h3>2. Integratie op Niveau 6</h3>
-                    <p>Bijna alle systemen hebben een integratief/balancerend element rond niveau 6 (Tiferet/Solar Plexus/Oranje)</p>
+                    <h3>2. Integratiepunt (Mid-levels)</h3>
+                    <p>Veel systemen identificeren een balanspunt rond niveau 5-6 (Tiferet/Solar Plexus/Orange/Hart)</p>
                 </div>
                 <div class="insight-box">
-                    <h3>3. Transcendentie op Niveau 1-2</h3>
-                    <p>Universele erkenning van transcendente toestanden aan de top</p>
+                    <h3>3. Transcendentie (Top levels)</h3>
+                    <p>Universele erkenning van niet-duale, unitaire toestanden aan de top van ontwikkelingshiërarchieën</p>
                 </div>
                 <div class="insight-box">
-                    <h3>4. Survival/Instinct Base</h3>
-                    <p>Alle systemen erkennen basale overlevingslagen (7-8-9)</p>
+                    <h3>4. Survival/Instinct Basis</h3>
+                    <p>Alle systemen erkennen fundamentele overlevings- en instinctieve lagen (levels 8-10)</p>
                 </div>
                 <div class="insight-box">
-                    <h3>5. Heart/Love Center</h3>
-                    <p>Consistent hart/liefde centrum rond niveau 4 (Chesed/Anahata/G-centrum)</p>
+                    <h3>5. Limiet van Cross-Mapping</h3>
+                    <p>Deze overeenkomsten zijn structureel en abstract. Exacte één-op-één correspondences zijn methodologisch problematisch vanwege verschillende ontstaanscontexten en doelen van elk systeem.</p>
                 </div>
             </div>
         </div>
@@ -437,128 +456,117 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         let currentLang = 'nl';
-        
-        const translations = {
-            nl: {
-                mainTitle: "Bewustzijns-Mapping Explorer",
-                nav: {
-                    home: "Home",
-                    core: "Kern Systemen",
-                    philosophy: "Filosofie",
-                    neuroscience: "Neuroscience",
-                    development: "Ontwikkeling",
-                    culture: "Cultuur & Kunst",
-                    compare: "Vergelijken",
-                    search: "Zoeken"
-                }
-            },
-            en: {
-                mainTitle: "Consciousness Mapping Explorer",
-                nav: {
-                    home: "Home",
-                    core: "Core Systems",
-                    philosophy: "Philosophy",
-                    neuroscience: "Neuroscience",
-                    development: "Development",
-                    culture: "Culture & Art",
-                    compare: "Compare",
-                    search: "Search"
-                }
-            }
-        };
 
         const coreData = [
-            { level: 1, sefira: "Kether", chakra: "Sahasrara", hd: "Hoofd", function: "Pure bewustzijn", trigram: "☰ Qian", element: "Spirit/ether", wuxing: "Water→Wijsheid" },
-            { level: 2, sefira: "Chokmah", chakra: "Ajna", hd: "Ajna", function: "Inzicht/visie", trigram: "☱ Dui", element: "Lucht/ether", wuxing: "Metaal→Precisie" },
-            { level: 3, sefira: "Binah", chakra: "Vishuddha", hd: "Keel", function: "Begrip/expressie", trigram: "☲ Li", element: "Vuur/ruimte", wuxing: "Vuur→Expressie" },
-            { level: 4, sefira: "Chesed", chakra: "Anahata", hd: "G-centrum", function: "Liefde/richting", trigram: "☳ Zhen", element: "Lucht", wuxing: "Hout→Groei" },
-            { level: 5, sefira: "Gevurah", chakra: "Manipura", hd: "Hart/Ego", function: "Wil/afbakening", trigram: "☴ Xun", element: "Vuur", wuxing: "Vuur→Kracht" },
-            { level: 6, sefira: "Tiferet", chakra: "Manipura", hd: "Solar Plexus", function: "Emotie/balans", trigram: "☵ Kan", element: "Water", wuxing: "Aarde→Integratie" },
-            { level: 7, sefira: "Netzach", chakra: "Svadhisthana", hd: "Sacraal", function: "Levenskracht/creatie", trigram: "☶ Gen", element: "Aarde", wuxing: "Hout→Creatie" },
-            { level: 8, sefira: "Hod", chakra: "Svadhisthana", hd: "Milt", function: "Presentie/instinct", trigram: "☷ Kun", element: "Aarde", wuxing: "Aarde→Stabilisatie" },
-            { level: 9, sefira: "Yesod", chakra: "Muladhara", hd: "Root", function: "Druk/manifestatie", trigram: "—", element: "Aarde", wuxing: "Aarde→Drager" }
+            { level: 1, sefira: "Kether", chakra: "Sahasrara", hd: "Hoofd", function: "Pure bewustzijn", trigram: "☰ Qian (Hemel)", element: "Ether/Spirit", wuxing: "—" },
+            { level: 2, sefira: "Chokmah", chakra: "Bindu", hd: "Ajna", function: "Wijsheid/Inzicht", trigram: "☱ Dui (Meer)", element: "Lucht", wuxing: "Metaal" },
+            { level: 3, sefira: "Binah", chakra: "Ajna", hd: "Keel", function: "Begrip/Vorm", trigram: "☲ Li (Vuur)", element: "Vuur", wuxing: "Vuur" },
+            { level: 4, sefira: "Chesed", chakra: "Vishuddha", hd: "G-centrum", function: "Liefde/Expansie", trigram: "☳ Zhen (Donder)", element: "Water", wuxing: "Hout" },
+            { level: 5, sefira: "Gevurah", chakra: "Anahata", hd: "Hart/Ego", function: "Kracht/Afbakening", trigram: "☴ Xun (Wind)", element: "Vuur", wuxing: "Hout" },
+            { level: 6, sefira: "Tiferet", chakra: "Manipura", hd: "Solar Plexus", function: "Schoonheid/Balans", trigram: "☵ Kan (Water)", element: "Lucht", wuxing: "Water" },
+            { level: 7, sefira: "Netzach", chakra: "Svadhisthana", hd: "Sacraal", function: "Overwinning/Emotie", trigram: "☶ Gen (Berg)", element: "Aarde/Water", wuxing: "Aarde" },
+            { level: 8, sefira: "Hod", chakra: "Muladhara", hd: "Milt", function: "Glorie/Intellect", trigram: "☷ Kun (Aarde)", element: "Aarde", wuxing: "Aarde" },
+            { level: 9, sefira: "Yesod", chakra: "Atala", hd: "Root", function: "Fundament/Subconsciousness", trigram: "Wu Ji (Primordial)", element: "Aarde/Chaos", wuxing: "Water→Chaos" },
+            { level: 10, sefira: "Malkuth", chakra: "Patala", hd: "—", function: "Koninkrijk/Manifestatie", trigram: "—", element: "Aarde/Materie", wuxing: "—" }
         ];
 
         const philosophyData = [
-            { level: 1, jung: "Zelf", aurobindo: "Overmind", vedanta: "Sat", sufisme: "Fana fi'llah", gurdjieff: "Higher Emotional", spiral: "Turquoise" },
-            { level: 2, jung: "Intuition", aurobindo: "Intuitive Mind", vedanta: "Chit", sufisme: "Sirr", gurdjieff: "Higher Mental", spiral: "Yellow" },
-            { level: 3, jung: "Thinking", aurobindo: "Illumined Mind", vedanta: "Ananda", sufisme: "Ruh", gurdjieff: "Intellectual", spiral: "Green" },
-            { level: 4, jung: "Feeling", aurobindo: "Higher Mind", vedanta: "Vijnanamaya", sufisme: "Qalb", gurdjieff: "Higher Moving", spiral: "Orange" },
-            { level: 5, jung: "Sensation", aurobindo: "Mind Proper", vedanta: "Pranamaya", sufisme: "Nafs", gurdjieff: "Moving", spiral: "Red" },
-            { level: 6, jung: "—", aurobindo: "Vital", vedanta: "Pranamaya", sufisme: "Hawa", gurdjieff: "Emotional", spiral: "Blue" },
-            { level: 7, jung: "—", aurobindo: "Life-Force", vedanta: "Annamaya", sufisme: "Shahwa", gurdjieff: "Instinctive", spiral: "Purple" },
-            { level: 8, jung: "—", aurobindo: "Physical", vedanta: "Annamaya", sufisme: "Jism", gurdjieff: "—", spiral: "Beige" }
+            { level: 1, jung: "Zelf (Unity)", aurobindo: "Overmind", vedanta: "Sat (Being)", sufisme: "Fana fi'llah", gurdjieff: "Higher Emotional", spiral: "Turquoise" },
+            { level: 2, jung: "Intuition", aurobindo: "Intuitive Mind", vedanta: "Chit (Consciousness)", sufisme: "Sirr (Secret)", gurdjieff: "Higher Mental", spiral: "Yellow" },
+            { level: 3, jung: "Thinking", aurobindo: "Illumined Mind", vedanta: "Ananda (Bliss)", sufisme: "Ruh (Spirit)", gurdjieff: "Intellectual", spiral: "Green" },
+            { level: 4, jung: "Feeling (Anima)", aurobindo: "Higher Mind", vedanta: "Vijnanamaya", sufisme: "Qalb (Heart)", gurdjieff: "Higher Moving", spiral: "Orange" },
+            { level: 5, jung: "Sensation", aurobindo: "Mind Proper", vedanta: "Manomaya", sufisme: "Nafs (Ego)", gurdjieff: "Moving", spiral: "Red" },
+            { level: 6, jung: "Persona", aurobindo: "Vital-Mind", vedanta: "Pranamaya", sufisme: "Hawa (Desire)", gurdjieff: "Emotional", spiral: "Blue" },
+            { level: 7, jung: "Shadow", aurobindo: "Vital", vedanta: "Pranamaya", sufisme: "Shahwa (Lust)", gurdjieff: "Instinctive", spiral: "Purple" },
+            { level: 8, jung: "Body", aurobindo: "Physical-Vital", vedanta: "Annamaya", sufisme: "Jism (Body)", gurdjieff: "Motor", spiral: "Beige" },
+            { level: 9, jung: "Unconscious", aurobindo: "Subconscient", vedanta: "Tamas", sufisme: "Nafs Ammara", gurdjieff: "Automatic", spiral: "Infrared" },
+            { level: 10, jung: "—", aurobindo: "Inconscient", vedanta: "—", sufisme: "—", gurdjieff: "—", spiral: "—" }
         ];
 
         const neuroscienceData = [
-            { level: 1, neural: "Claustrum/Thalamus", iit: "Maximale integratie", workspace: "Global broadcasting", leary: "Neuro-atomic" },
-            { level: 2, neural: "Prefrontal cortex", iit: "Hoge Φ", workspace: "Executive attention", leary: "Neuro-genetic" },
-            { level: 3, neural: "Wernicke/Broca", iit: "Taal-integratie", workspace: "Language networks", leary: "Neuro-somatic" },
-            { level: 4, neural: "Anterior cingulate", iit: "Empathie-netwerk", workspace: "Social cognition", leary: "Socio-sexual" },
-            { level: 5, neural: "Dorsal attention", iit: "Conflict monitoring", workspace: "Cognitive control", leary: "Neuro-political" },
-            { level: 6, neural: "Default mode network", iit: "Self-referential", workspace: "Mind-wandering", leary: "Neuro-temporal" },
-            { level: 7, neural: "Limbic system", iit: "Emotie-integratie", workspace: "Salience network", leary: "Bio-survival" },
-            { level: 8, neural: "Insula/interoception", iit: "Body-awareness", workspace: "Interoceptive network", leary: "—" }
+            { level: 1, neural: "Integrated thalamo-cortical", iit: "Maximale Φ", workspace: "Full global access", leary: "Neuro-atomic" },
+            { level: 2, neural: "Prefrontal cortex", iit: "Hoge Φ integratie", workspace: "Executive networks", leary: "Neuro-genetic" },
+            { level: 3, neural: "Frontoparietal network", iit: "Taal/symbolische Φ", workspace: "Language networks", leary: "Neuro-somatic" },
+            { level: 4, neural: "Anterior cingulate", iit: "Empathie Φ", workspace: "Social cognition", leary: "Socio-sexual" },
+            { level: 5, neural: "Dorsolateral PFC", iit: "Executieve Φ", workspace: "Cognitive control", leary: "Neuro-political" },
+            { level: 6, neural: "Default mode network", iit: "Self-referential Φ", workspace: "Mind-wandering", leary: "Neuro-temporal" },
+            { level: 7, neural: "Limbic system", iit: "Emotionele Φ", workspace: "Salience network", leary: "Emotional-territorial" },
+            { level: 8, neural: "Insula/interoception", iit: "Body-state Φ", workspace: "Interoceptive", leary: "Bio-survival" },
+            { level: 9, neural: "Brainstem/subcortical", iit: "Minimale Φ", workspace: "Arousal systems", leary: "—" },
+            { level: 10, neural: "Spinal/autonomic", iit: "Pre-Φ", workspace: "—", leary: "—" }
         ];
 
         const psychedelicData = [
-            { centrum: "Hoofd", dmt: "Ego dissolution", psilocybin: "Oceanic boundlessness", lsd: "Unity consciousness", mdma: "—", ketamine: "Hole experience", meditation: "Nirvikalpa samadhi" },
-            { centrum: "Ajna", dmt: "Geometric visions", psilocybin: "Sacred geometry", lsd: "Fractal insights", mdma: "—", ketamine: "Dissociation", meditation: "Savikalpa samadhi" },
-            { centrum: "Keel", dmt: "—", psilocybin: "Ineffability", lsd: "Creative expression", mdma: "Emotional openness", ketamine: "—", meditation: "Dharana" },
-            { centrum: "G", dmt: "—", psilocybin: "Interconnectedness", lsd: "Love/compassion", mdma: "Heart opening", ketamine: "—", meditation: "Dhyana" },
-            { centrum: "Ego", dmt: "—", psilocybin: "—", lsd: "Enhanced creativity", mdma: "Confidence", ketamine: "—", meditation: "Pratyahara" },
-            { centrum: "Solar Plexus", dmt: "Body dissolution", psilocybin: "Emotional release", lsd: "Mood enhancement", mdma: "Empathy", ketamine: "Body detachment", meditation: "—" }
+            { level: 1, dmt: "Ego dissolution", psilocybin: "Oceanic boundlessness", lsd: "Unity consciousness", mdma: "Universal love", ketamine: "Complete dissociation", meditation: "Nirvikalpa samadhi" },
+            { level: 2, dmt: "Geometric visions", psilocybin: "Sacred geometry", lsd: "Fractal insights", mdma: "Empathic expansion", ketamine: "K-hole", meditation: "Savikalpa samadhi" },
+            { level: 3, dmt: "Entity contact", psilocybin: "Archetypal visions", lsd: "Symbolic thinking", mdma: "Enhanced communication", ketamine: "Dissociation", meditation: "Dharana (focus)" },
+            { level: 4, dmt: "Emotional catharsis", psilocybin: "Interconnectedness", lsd: "Love/compassion", mdma: "Heart opening", ketamine: "Emotional numbness", meditation: "Dhyana (absorption)" },
+            { level: 5, dmt: "Body dissolution", psilocybin: "Ego softening", lsd: "Enhanced creativity", mdma: "Self-confidence", ketamine: "Body anesthesia", meditation: "Pratyahara (withdrawal)" },
+            { level: 6, dmt: "Emotional release", psilocybin: "Emotional processing", lsd: "Mood enhancement", mdma: "Pure empathy", ketamine: "Detachment", meditation: "Pranayama (breath)" },
+            { level: 7, dmt: "Primal imagery", psilocybin: "Nature connection", lsd: "Sensory enhancement", mdma: "Physical euphoria", ketamine: "Motor impairment", meditation: "Body awareness" },
+            { level: 8, dmt: "Physical effects", psilocybin: "Body load", lsd: "Stimulation", mdma: "Physical touch", ketamine: "Numbness", meditation: "Relaxation" },
+            { level: 9, dmt: "—", psilocybin: "Nausea/purging", lsd: "—", mdma: "—", ketamine: "Loss of coordination", meditation: "—" },
+            { level: 10, dmt: "—", psilocybin: "—", lsd: "—", mdma: "—", ketamine: "—", meditation: "—" }
         ];
 
         const archetypeData = [
-            { level: 1, jung: "Self", tarot: "World/Fool", greek: "Zeus/Ouranos", hindu: "Brahma", celtic: "Lugh/Odin", campbell: "Return" },
-            { level: 2, jung: "Wise Old Man", tarot: "Hermit/Magician", greek: "Hermes/Apollo", hindu: "Saraswati", celtic: "Lugh/Heimdall", campbell: "Revelation" },
-            { level: 3, jung: "Great Mother", tarot: "High Priestess", greek: "Athena/Hera", hindu: "Lakshmi", celtic: "Brigid/Frigg", campbell: "Transformation" },
-            { level: 4, jung: "Anima/Animus", tarot: "Lovers/Empress", greek: "Aphrodite/Eros", hindu: "Vishnu", celtic: "Danu/Freyr", campbell: "Meeting Goddess" },
-            { level: 5, jung: "Hero", tarot: "Emperor/Chariot", greek: "Ares/Hephaistos", hindu: "Indra", celtic: "Nuada/Thor", campbell: "Ordeal" },
-            { level: 6, jung: "Trickster", tarot: "Devil/Tower", greek: "Dionysus", hindu: "Shiva", celtic: "Loki", campbell: "Road of Trials" },
-            { level: 7, jung: "Shadow", tarot: "Death/Moon", greek: "Hades/Persephone", hindu: "Kali", celtic: "Morrigan/Hel", campbell: "Threshold Guardian" },
-            { level: 8, jung: "—", tarot: "Star/Sun", greek: "Pan/Gaia", hindu: "Ganesha", celtic: "Cernunnos/Jord", campbell: "Call to Adventure" }
+            { level: 1, jung: "Self", tarot: "World", greek: "Ouranos", hindu: "Brahman", celtic: "The One", campbell: "Return with Elixir" },
+            { level: 2, jung: "Wise Old Man", tarot: "Hermit", greek: "Apollo", hindu: "Saraswati", celtic: "Odin", campbell: "Apotheosis" },
+            { level: 3, jung: "Great Mother", tarot: "High Priestess", greek: "Athena", hindu: "Parvati", celtic: "Brigid", campbell: "Meeting Goddess" },
+            { level: 4, jung: "Anima/Animus", tarot: "Lovers", greek: "Aphrodite", hindu: "Vishnu", celtic: "Freya", campbell: "Sacred Marriage" },
+            { level: 5, jung: "Hero", tarot: "Chariot", greek: "Ares", hindu: "Indra", celtic: "Thor", campbell: "Ordeal" },
+            { level: 6, jung: "Trickster", tarot: "Magician", greek: "Hermes", hindu: "Krishna", celtic: "Loki", campbell: "Road of Trials" },
+            { level: 7, jung: "Shadow", tarot: "Devil", greek: "Dionysus", hindu: "Kali", celtic: "Morrigan", campbell: "Belly of Whale" },
+            { level: 8, jung: "Child", tarot: "Fool", greek: "Pan", hindu: "Ganesha", celtic: "Cernunnos", campbell: "Call to Adventure" },
+            { level: 9, jung: "—", tarot: "Moon", greek: "Hades", hindu: "Yama", celtic: "Hel", campbell: "Underworld" },
+            { level: 10, jung: "—", tarot: "—", greek: "Chaos", hindu: "—", celtic: "—", campbell: "—" }
         ];
 
         const developmentData = [
-            { level: "1-2", piaget: "Formal operational+", kohlberg: "Universal principles", gilligan: "Care/Justice integration", fowler: "Universalizing", beck: "Integral/Holistic", kegan: "Self-transforming" },
-            { level: "3-4", piaget: "Formal operational", kohlberg: "Social contract", gilligan: "Contextual care", fowler: "Conjunctive", beck: "Integrative", kegan: "Self-authoring" },
-            { level: "5-6", piaget: "Concrete operational", kohlberg: "Law and order", gilligan: "Relational responsibility", fowler: "Individuative", beck: "Achievist/Communitarian", kegan: "Socialized" },
-            { level: "7-8", piaget: "Preoperational", kohlberg: "Interpersonal", gilligan: "Self-sacrifice", fowler: "Synthetic", beck: "Traditionalist", kegan: "Imperial" },
-            { level: "9", piaget: "Sensorimotor", kohlberg: "Punishment avoidance", gilligan: "Survival", fowler: "Primal", beck: "Survivalist", kegan: "Incorporative" }
+            { level: "1-2", piaget: "Post-formal", kohlberg: "Universal ethical", gilligan: "Integrated care", fowler: "Universalizing", beck: "Holistic", kegan: "Self-transforming" },
+            { level: "3-4", piaget: "Formal operational", kohlberg: "Social contract", gilligan: "Principled care", fowler: "Conjunctive", beck: "Integrative", kegan: "Self-authoring" },
+            { level: "5-6", piaget: "Concrete operational", kohlberg: "Law and order", gilligan: "Conventional care", fowler: "Individuative", beck: "Achievist", kegan: "Socialized" },
+            { level: "7-8", piaget: "Preoperational", kohlberg: "Interpersonal", gilligan: "Relational", fowler: "Synthetic", beck: "Conformist", kegan: "Imperial" },
+            { level: "9-10", piaget: "Sensorimotor", kohlberg: "Punishment/obedience", gilligan: "Survival", fowler: "Primal", beck: "Survivalist", kegan: "Incorporative" }
         ];
 
         const musicData = [
-            { level: 1, interval: "Unison (1:1)", scale: "Chromatic", harmony: "Unity/Silence", freq: "432/528", instruments: "Silence/Om" },
-            { level: 2, interval: "Octave (2:1)", scale: "Whole tone", harmony: "Perfect resonance", freq: "216-432", instruments: "Crystal bowls" },
-            { level: 3, interval: "Perfect 5th (3:2)", scale: "Pentatonic", harmony: "Major triads", freq: "144-288", instruments: "Voice/mantra" },
-            { level: 4, interval: "Perfect 4th (4:3)", scale: "Major scales", harmony: "Heart harmonies", freq: "108-216", instruments: "Strings/harp" },
-            { level: 5, interval: "Major 3rd (5:4)", scale: "Minor scales", harmony: "Power chords", freq: "72-144", instruments: "Brass/wind" },
-            { level: 6, interval: "Minor 3rd (6:5)", scale: "Dorian/blues", harmony: "Emotional tensions", freq: "54-108", instruments: "Piano/percussion" },
-            { level: 7, interval: "Minor 2nd (16:15)", scale: "Phrygian", harmony: "Dissonance", freq: "36-72", instruments: "Drums/rhythm" },
-            { level: 8, interval: "Semitone (25:24)", scale: "Microtonal", harmony: "Primal sounds", freq: "18-36", instruments: "Body percussion" }
+            { level: 1, interval: "Perfect Unison (1:1)", scale: "All tones", harmony: "Unity/Silence", freq: "∞/432", instruments: "Silence/Om" },
+            { level: 2, interval: "Octave (2:1)", scale: "Chromatic", harmony: "Perfect consonance", freq: "432-864", instruments: "Crystal bowls" },
+            { level: 3, interval: "Perfect 5th (3:2)", scale: "Pentatonic", harmony: "Open harmony", freq: "288-576", instruments: "Voice/flute" },
+            { level: 4, interval: "Perfect 4th (4:3)", scale: "Major", harmony: "Stable triads", freq: "216-432", instruments: "Strings/harp" },
+            { level: 5, interval: "Major 3rd (5:4)", scale: "Minor", harmony: "Emotional thirds", freq: "144-288", instruments: "Piano/guitar" },
+            { level: 6, interval: "Minor 3rd (6:5)", scale: "Dorian", harmony: "Modal color", freq: "108-216", instruments: "Brass/winds" },
+            { level: 7, interval: "Major 2nd (9:8)", scale: "Phrygian", harmony: "Tension", freq: "72-144", instruments: "Percussion" },
+            { level: 8, interval: "Minor 2nd (16:15)", scale: "Locrian", harmony: "Dissonance", freq: "36-72", instruments: "Drums" },
+            { level: 9, interval: "Microtone", scale: "Quarter-tones", harmony: "Pre-tonal", freq: "18-36", instruments: "Body sounds" },
+            { level: 10, interval: "—", scale: "Noise", harmony: "Chaos", freq: "Sub-sonic", instruments: "—" }
         ];
 
         const colorData = [
-            { level: 1, color: "Wit/Helder", wavelength: "Alle/∞", chakraColor: "Wit/Goud", psychology: "Transcendentie", art: "Conceptual art" },
-            { level: 2, color: "Indigo/Violet", wavelength: "380-450", chakraColor: "Indigo", psychology: "Intuïtie/Wijsheid", art: "Suprematism" },
-            { level: 3, color: "Blauw", wavelength: "450-495", chakraColor: "Blauw", psychology: "Communicatie/Waarheid", art: "Expressionism" },
-            { level: 4, color: "Groen", wavelength: "495-570", chakraColor: "Groen", psychology: "Liefde/Balans", art: "Impressionism" },
-            { level: 5, color: "Geel", wavelength: "570-590", chakraColor: "Geel", psychology: "Wilskracht/Ego", art: "Cubism" },
-            { level: 6, color: "Oranje", wavelength: "590-620", chakraColor: "Oranje", psychology: "Emotie/Creativiteit", art: "Fauvism" },
-            { level: 7, color: "Rood", wavelength: "620-750", chakraColor: "Rood", psychology: "Passie/Vitaliteit", art: "Romanticism" },
-            { level: 8, color: "Zwart/Bruin", wavelength: "Absorptie", chakraColor: "—", psychology: "Grounding/Materie", art: "Realism" }
+            { level: 1, color: "Wit/Clear Light", wavelength: "All/∞", chakraColor: "Wit/Goud", psychology: "Transcendentie", art: "Conceptual" },
+            { level: 2, color: "Violet", wavelength: "380-450", chakraColor: "Violet", psychology: "Spiritualiteit", art: "Suprematism" },
+            { level: 3, color: "Indigo", wavelength: "420-450", chakraColor: "Indigo", psychology: "Intuïtie", art: "Symbolism" },
+            { level: 4, color: "Blauw", wavelength: "450-495", chakraColor: "Blauw", psychology: "Communicatie", art: "Expressionism" },
+            { level: 5, color: "Groen", wavelength: "495-570", chakraColor: "Groen", psychology: "Balans/Hart", art: "Impressionism" },
+            { level: 6, color: "Geel", wavelength: "570-590", chakraColor: "Geel", psychology: "Wilskracht", art: "Cubism" },
+            { level: 7, color: "Oranje", wavelength: "590-620", chakraColor: "Oranje", psychology: "Emotie/Creativiteit", art: "Fauvism" },
+            { level: 8, color: "Rood", wavelength: "620-750", chakraColor: "Rood", psychology: "Vitaliteit", art: "Romanticism" },
+            { level: 9, color: "Infrarood", wavelength: ">750", chakraColor: "Bruin/Zwart", psychology: "Subconsciousness", art: "Primitivism" },
+            { level: 10, color: "Zwart", wavelength: "Absorptie", chakraColor: "—", psychology: "Chaos/Materie", art: "—" }
         ];
 
         const geometryData = [
-            { level: 1, platonic: "Sphere/Point", geometry2d: "Circle", fractals: "Mandelbrot set", architecture: "Dome/Circle", mandala: "Yantra center" },
-            { level: 2, platonic: "Icosahedron", geometry2d: "Icosagon", fractals: "Julia sets", architecture: "Gothic spires", mandala: "Sri Yantra" },
-            { level: 3, platonic: "Dodecahedron", geometry2d: "Pentagon", fractals: "Sierpinski", architecture: "Pentagonal", mandala: "Flower of Life" },
-            { level: 4, platonic: "Octahedron", geometry2d: "Square", fractals: "Koch snowflake", architecture: "Square buildings", mandala: "Rose windows" },
-            { level: 5, platonic: "Hexahedron (Cube)", geometry2d: "Triangle", fractals: "Dragon curve", architecture: "Pyramids", mandala: "Triangular" },
-            { level: 6, platonic: "Tetrahedron", geometry2d: "—", fractals: "Cantor set", architecture: "Basic structures", mandala: "Cross patterns" },
-            { level: "7-8", platonic: "—", geometry2d: "Line/Point", fractals: "Simple iterations", architecture: "Linear/Basic", mandala: "Simple mandalas" }
+            { level: 1, platonic: "Point/Singularity", geometry2d: "∞-gon", fractals: "Mandelbrot (whole)", architecture: "Dome", mandala: "Bindu (point)" },
+            { level: 2, platonic: "Sphere", geometry2d: "Circle", fractals: "Julia sets", architecture: "Geodesic dome", mandala: "Circle" },
+            { level: 3, platonic: "Icosahedron (20)", geometry2d: "Pentagon", fractals: "Sierpinski triangle", architecture: "Gothic vault", mandala: "Sri Yantra" },
+            { level: 4, platonic: "Dodecahedron (12)", geometry2d: "Pentagon", fractals: "Pentagonal fractals", architecture: "Pentagon", mandala: "Flower of Life" },
+            { level: 5, platonic: "Octahedron (8)", geometry2d: "Square", fractals: "Koch snowflake", architecture: "Pyramid", mandala: "Square mandala" },
+            { level: 6, platonic: "Hexahedron/Cube (6)", geometry2d: "Square", fractals: "Menger sponge", architecture: "Cubic", mandala: "Square" },
+            { level: 7, platonic: "Tetrahedron (4)", geometry2d: "Triangle", fractals: "Sierpinski pyramid", architecture: "Tetrahedron", mandala: "Triangle" },
+            { level: 8, platonic: "—", geometry2d: "Line", fractals: "Cantor set", architecture: "Linear", mandala: "Line" },
+            { level: 9, platonic: "—", geometry2d: "Point", fractals: "Dust", architecture: "—", mandala: "—" },
+            { level: 10, platonic: "—", geometry2d: "—", fractals: "Chaos", architecture: "—", mandala: "—" }
         ];
 
         function generateTable(data, columns) {
@@ -587,12 +595,12 @@
         function generateAllTables() {
             document.getElementById('coreTable').innerHTML = generateTable(coreData, [
                 { key: 'level', label: 'Niveau' },
-                { key: 'sefira', label: 'Sefira' },
-                { key: 'chakra', label: 'Chakra' },
-                { key: 'hd', label: 'HD-Centrum' },
+                { key: 'sefira', label: 'Sefira (Kabbala)' },
+                { key: 'chakra', label: 'Chakra (9-systeem)' },
+                { key: 'hd', label: 'Human Design' },
                 { key: 'function', label: 'Functie' },
-                { key: 'trigram', label: 'Trigram' },
-                { key: 'element', label: '4-Element' },
+                { key: 'trigram', label: 'I Ching' },
+                { key: 'element', label: 'Elementen' },
                 { key: 'wuxing', label: 'Wu-Xing' }
             ]);
 
@@ -608,67 +616,67 @@
 
             document.getElementById('neuroscienceTable').innerHTML = generateTable(neuroscienceData, [
                 { key: 'level', label: 'Niveau' },
-                { key: 'neural', label: 'Neurale Netwerken' },
+                { key: 'neural', label: 'Neurale Systemen (speculatief)' },
                 { key: 'iit', label: 'IIT Φ-complexiteit' },
                 { key: 'workspace', label: 'Global Workspace' },
                 { key: 'leary', label: 'Leary 8-Circuit' }
             ]);
 
             document.getElementById('psychedelicTable').innerHTML = generateTable(psychedelicData, [
-                { key: 'centrum', label: 'Centrum' },
+                { key: 'level', label: 'Niveau' },
                 { key: 'dmt', label: '5-MeO-DMT' },
                 { key: 'psilocybin', label: 'Psilocybin' },
                 { key: 'lsd', label: 'LSD' },
                 { key: 'mdma', label: 'MDMA' },
                 { key: 'ketamine', label: 'Ketamine' },
-                { key: 'meditation', label: 'Meditation States' }
+                { key: 'meditation', label: 'Meditatie Toestanden' }
             ]);
 
             document.getElementById('archetypeTable').innerHTML = generateTable(archetypeData, [
                 { key: 'level', label: 'Niveau' },
-                { key: 'jung', label: 'Jung' },
-                { key: 'tarot', label: 'Tarot Majors' },
-                { key: 'greek', label: 'Greek Gods' },
+                { key: 'jung', label: 'Jung Archetypen' },
+                { key: 'tarot', label: 'Tarot' },
+                { key: 'greek', label: 'Griekse Goden' },
                 { key: 'hindu', label: 'Hindu Devas' },
-                { key: 'celtic', label: 'Celtic/Nordic' },
-                { key: 'campbell', label: 'Campbell Hero' }
+                { key: 'celtic', label: 'Keltisch/Noors' },
+                { key: 'campbell', label: 'Hero\'s Journey' }
             ]);
 
             document.getElementById('developmentTable').innerHTML = generateTable(developmentData, [
-                { key: 'level', label: 'Niveau' },
+                { key: 'level', label: 'Niveaus' },
                 { key: 'piaget', label: 'Piaget' },
                 { key: 'kohlberg', label: 'Kohlberg' },
                 { key: 'gilligan', label: 'Gilligan' },
-                { key: 'fowler', label: 'Fowler Faith' },
+                { key: 'fowler', label: 'Fowler' },
                 { key: 'beck', label: 'Beck & Cowan' },
                 { key: 'kegan', label: 'Kegan' }
             ]);
 
             document.getElementById('musicTable').innerHTML = generateTable(musicData, [
                 { key: 'level', label: 'Niveau' },
-                { key: 'interval', label: 'Musical Intervals' },
-                { key: 'scale', label: 'Scales' },
-                { key: 'harmony', label: 'Harmonies' },
-                { key: 'freq', label: 'Frequencies (Hz)' },
-                { key: 'instruments', label: 'Instruments' }
+                { key: 'interval', label: 'Muzikale Intervallen' },
+                { key: 'scale', label: 'Toonladders' },
+                { key: 'harmony', label: 'Harmonieën' },
+                { key: 'freq', label: 'Frequenties (Hz)' },
+                { key: 'instruments', label: 'Instrumenten' }
             ]);
 
             document.getElementById('colorTable').innerHTML = generateTable(colorData, [
                 { key: 'level', label: 'Niveau' },
-                { key: 'color', label: 'Colors' },
-                { key: 'wavelength', label: 'Wavelength (nm)' },
-                { key: 'chakraColor', label: 'Chakra Colors' },
-                { key: 'psychology', label: 'Psychological Effect' },
-                { key: 'art', label: 'Artistic Movements' }
+                { key: 'color', label: 'Kleuren' },
+                { key: 'wavelength', label: 'Golflengte (nm)' },
+                { key: 'chakraColor', label: 'Chakra Kleuren' },
+                { key: 'psychology', label: 'Psychologisch Effect' },
+                { key: 'art', label: 'Kunststroming' }
             ]);
 
             document.getElementById('geometryTable').innerHTML = generateTable(geometryData, [
                 { key: 'level', label: 'Niveau' },
-                { key: 'platonic', label: 'Platonic Solids' },
-                { key: 'geometry2d', label: '2D Geometry' },
+                { key: 'platonic', label: 'Platonische Lichamen' },
+                { key: 'geometry2d', label: '2D Geometrie' },
                 { key: 'fractals', label: 'Fractals' },
-                { key: 'architecture', label: 'Architecture' },
-                { key: 'mandala', label: 'Mandala Patterns' }
+                { key: 'architecture', label: 'Architectuur' },
+                { key: 'mandala', label: 'Mandala Patronen' }
             ]);
         }
 
@@ -684,11 +692,11 @@
 
         const allSystems = [
             { id: 'sefira', name: 'Sefira (Kabbala)', data: coreData, key: 'sefira' },
-            { id: 'chakra', name: 'Chakra', data: coreData, key: 'chakra' },
+            { id: 'chakra', name: 'Chakra (9-systeem)', data: coreData, key: 'chakra' },
             { id: 'hd', name: 'Human Design', data: coreData, key: 'hd' },
             { id: 'jung', name: 'Jung', data: philosophyData, key: 'jung' },
             { id: 'spiral', name: 'Spiral Dynamics', data: philosophyData, key: 'spiral' },
-            { id: 'neural', name: 'Neurale Netwerken', data: neuroscienceData, key: 'neural' },
+            { id: 'neural', name: 'Neurale Systemen', data: neuroscienceData, key: 'neural' },
             { id: 'tarot', name: 'Tarot', data: archetypeData, key: 'tarot' },
             { id: 'piaget', name: 'Piaget', data: developmentData, key: 'piaget' }
         ];
@@ -768,10 +776,11 @@
                 { name: 'Kern Systemen', data: coreData },
                 { name: 'Filosofie', data: philosophyData },
                 { name: 'Neuroscience', data: neuroscienceData },
+                { name: 'Psychedelisch', data: psychedelicData },
                 { name: 'Archetypen', data: archetypeData },
                 { name: 'Ontwikkeling', data: developmentData },
                 { name: 'Muziek', data: musicData },
-                { name: 'Kleur', data: colorData },
+                { name: 'Kleuren', data: colorData },
                 { name: 'Geometrie', data: geometryData }
             ];
             
@@ -789,12 +798,12 @@
                 return;
             }
             
-            searchResults.innerHTML = `<h3>Gevonden ${results.length} resultaten:</h3>`;
+            searchResults.innerHTML = `<h3>Gevonden: ${results.length} resultaten</h3>`;
             results.forEach(result => {
                 const card = document.createElement('div');
                 card.className = 'mini-card';
                 card.innerHTML = `
-                    <strong>${result.category}</strong> - Niveau ${result.row.level || result.row.level}
+                    <strong>${result.category}</strong> - Niveau ${result.row.level}
                     <br><small>${JSON.stringify(result.row).substring(0, 200)}...</small>
                 `;
                 searchResults.appendChild(card);
@@ -803,16 +812,11 @@
 
         document.getElementById('langToggle').addEventListener('click', function() {
             currentLang = currentLang === 'nl' ? 'en' : 'nl';
-            this.textContent = currentLang === 'nl' ? 'EN' : 'NL';
-            document.getElementById('mainTitle').textContent = translations[currentLang].mainTitle;
-            const navBtns = document.querySelectorAll('#mainNav .nav-btn');
-            const navKeys = Object.keys(translations[currentLang].nav);
-            navBtns.forEach((btn, i) => {
-                btn.textContent = translations[currentLang].nav[navKeys[i]];
-            });
+            this.textContent = currentLang === 'nl' ? '🌐 EN' : '🌐 NL';
         });
 
         const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x000000, 1, 100);
         const camera = new THREE.PerspectiveCamera(50, window.innerWidth / (window.innerHeight * 0.6), 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         
@@ -821,16 +825,19 @@
         renderer.setClearColor(0x000000, 0);
         container.appendChild(renderer.domElement);
 
+        scene.add(new THREE.GridHelper(10, 10, 0x00ffff, 0x004444));
+
         const consciousnessLevels = [
-            { level: 1, color: 0xffffff, w: 0.1, radius: 0.3 },
-            { level: 2, color: 0x4444ff, w: 0.2, radius: 0.4 },
-            { level: 3, color: 0x00ffff, w: 0.3, radius: 0.5 },
-            { level: 4, color: 0x00ff00, w: 0.4, radius: 0.6 },
-            { level: 5, color: 0xffff00, w: 0.5, radius: 0.7 },
-            { level: 6, color: 0xffa500, w: 0.6, radius: 0.8 },
-            { level: 7, color: 0xff00ff, w: 0.7, radius: 0.9 },
-            { level: 8, color: 0xff0000, w: 0.8, radius: 1.0 },
-            { level: 9, color: 0x8b4513, w: 0.9, radius: 1.1 }
+            { level: 1, color: 0xffffff, w: 0.0, radius: 0.3 },
+            { level: 2, color: 0x9400d3, w: 0.1, radius: 0.35 },
+            { level: 3, color: 0x4b0082, w: 0.2, radius: 0.4 },
+            { level: 4, color: 0x0000ff, w: 0.3, radius: 0.5 },
+            { level: 5, color: 0x00ff00, w: 0.4, radius: 0.6 },
+            { level: 6, color: 0xffff00, w: 0.5, radius: 0.7 },
+            { level: 7, color: 0xffa500, w: 0.6, radius: 0.8 },
+            { level: 8, color: 0xff0000, w: 0.7, radius: 0.9 },
+            { level: 9, color: 0x8b0000, w: 0.85, radius: 1.0 },
+            { level: 10, color: 0x000000, w: 1.0, radius: 1.1 }
         ];
 
         const spheres = [];
@@ -840,17 +847,17 @@
                 color: level.color, 
                 shininess: 100,
                 transparent: true,
-                opacity: 0.7,
+                opacity: level.level === 10 ? 0.3 : 0.7,
                 emissive: level.color,
                 emissiveIntensity: 0.2
             });
             const sphere = new THREE.Mesh(geometry, material);
             
-            const theta = (level.level - 1) * (Math.PI * 2 / 9);
-            const r = 4;
+            const theta = (level.level - 1) * (Math.PI * 2 / 10);
+            const r = 4.5;
             sphere.position.set(
                 r * Math.cos(theta),
-                level.w * 6 - 2,
+                level.w * 8 - 4,
                 r * Math.sin(theta)
             );
             
@@ -869,39 +876,46 @@
         pointLight2.position.set(-10, 5, -10);
         scene.add(pointLight2);
 
-        camera.position.set(8, 5, 8);
-        camera.lookAt(0, 2, 0);
+        camera.position.set(10, 3, 10);
+        camera.lookAt(0, 0, 0);
 
         let frame = 0;
+        const FRAME_MAX = 900;
 
         function animate() {
             requestAnimationFrame(animate);
             
-            const t = frame * 0.01;
+            const a1 = frame / FRAME_MAX;
             
             spheres.forEach((sphere, index) => {
                 const level = consciousnessLevels[index];
-                const theta = t + (level.level - 1) * (Math.PI * 2 / 9);
-                const r = 4 + Math.sin(t) * 0.5;
+                const theta = a1 * Math.PI * 2 + (level.level - 1) * (Math.PI * 2 / 10);
+                const r = 4.5 + Math.sin(a1 * Math.PI * 2) * 0.5;
                 
                 sphere.position.set(
                     r * Math.cos(theta),
-                    level.w * 6 - 2 + Math.sin(t * 2 + level.level) * 0.3,
+                    level.w * 8 - 4 + Math.sin(a1 * Math.PI * 4 + level.level) * 0.3,
                     r * Math.sin(theta)
                 );
                 
-                sphere.rotation.x += 0.01 * level.level;
-                sphere.rotation.y += 0.01 * level.level;
+                const axis = new THREE.Vector3(
+                    Math.sin(a1 * Math.PI * level.level),
+                    Math.cos(a1 * Math.PI * level.level),
+                    1
+                ).normalize();
+                sphere.quaternion.setFromAxisAngle(axis, a1 * Math.PI * 2 * level.level);
                 
-                sphere.material.opacity = 0.5 + 0.3 * Math.sin(t * level.level);
+                if (level.level !== 10) {
+                    sphere.material.opacity = 0.5 + 0.3 * Math.sin(a1 * Math.PI * 2 * level.level);
+                }
             });
             
-            camera.position.x = 8 * Math.cos(t * 0.2);
-            camera.position.z = 8 * Math.sin(t * 0.2);
-            camera.lookAt(0, 2, 0);
+            camera.position.x = 10 * Math.cos(a1 * Math.PI * 0.5);
+            camera.position.z = 10 * Math.sin(a1 * Math.PI * 0.5);
+            camera.lookAt(0, 0, 0);
             
             renderer.render(scene, camera);
-            frame++;
+            frame = (frame + 1) % FRAME_MAX;
         }
         animate();
 
